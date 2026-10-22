@@ -1,0 +1,346 @@
+# Course manifest for ATS114 - Secrets Engines & Dynamic Credential Lifecycle (OpenBao).
+#
+# One entry per section under `modules:`. Each section lists, in order: its
+# README, then for each module the landing page (course.md), its parts
+# (course-0N-*.md), and right after the part a lab tests, the lab's
+# question.md reading and the `type: lab` entry. The module's summary page
+# comes last. The section capstone closes the section. Playgrounds are not
+# listed: the landing page's playground marker shows them. solution.md is
+# never listed.
+#
+# Every `path:` is relative to this file.
+
+training:
+  id: ATS114
+  title: "OpenBao: Secrets Engines & Dynamic Credential Lifecycle"
+  maturity: draft
+  description: >
+    Training material covering the Secrets Engines & Dynamic Credential
+    Lifecycle domain of the OpenBao training path: static secrets with
+    versions, soft deletes, rollback and check-and-set in KV version 2, a
+    two-tier certificate authority with the PKI engine, short-lived
+    PostgreSQL credentials from the database engine with leases, renewal,
+    revocation and root rotation, and encryption as a service with the
+    Transit engine, key rotation and rewrap. Each module pairs a layered
+    reader with an ungraded hands-on playground and a graded practice lab.
+    Each section closes with an integration capstone.
+    Written for OpenBao v2.7.1.
+
+  certification:
+    name: OpenBao
+    code: OPENBAO
+    provider: Astrona
+    domain: Secrets Engines & Dynamic Credential Lifecycle
+    weight: 25
+
+modules:
+
+  - id: module-intro
+    title: "Introduction"
+    description: >
+      Start here. What this course trains you to do, how it is laid out, how
+      to get your machine ready with the astrona command-line tool, how the
+      content is written and checked, who maintains it, and how to report a
+      mistake.
+
+    content:
+      - type: reading
+        title: Introduction
+        path: sections/intro/README.md
+      - type: reading
+        title: "Welcome To The Course"
+        path: sections/intro/course-01-welcome.md
+      - type: reading
+        title: "Get Your Machine Ready"
+        path: sections/intro/course-02-get-your-machine-ready.md
+      - type: reading
+        title: "How This Course Is Made"
+        path: sections/intro/course-03-how-this-course-is-made.md
+
+  - id: module-010
+    title: "Static Secrets With KV Version 2"
+    description: >
+      What a secrets engine is, and the KV version 2 engine in depth: writing
+      and reading versioned secrets, soft deletes, destroying and undeleting
+      versions, rolling back a bad write, version limits, check-and-set and
+      the configuration of a whole mount.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-010/README.md
+
+      - type: reading
+        title: "Store And Version Secrets With KV Version 2"
+        path: sections/section-010/module-01/course.md
+      - type: reading
+        title: "Secrets Engines And The KV Version 2 Engine"
+        path: sections/section-010/module-01/course-01-secrets-engines-and-kv-v2.md
+      - type: reading
+        title: "Versions, Deletes And Rollback"
+        path: sections/section-010/module-01/course-02-versions-deletes-and-rollback.md
+      - type: reading
+        title: "Metadata, Version Limits And Check-And-Set"
+        path: sections/section-010/module-01/course-03-metadata-and-check-and-set.md
+      - type: reading
+        title: Question
+        path: sections/section-010/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Recover A Secret After A Bad Write Lab"
+        path: sections/section-010/module-01/labs/lab-01
+        difficulty: beginner
+        estimated_duration: 20m
+        topic: kv
+        task_kind: troubleshooting
+        tags: [kv-v2, versions, rollback, undelete, soft-delete, max-versions]
+        learning_goals:
+          - Find the last good version of a secret in its version history
+          - Restore a secret after a bad write and a soft delete without writing it again by hand
+          - Limit how many versions a secret keeps
+        resources:
+          - name: "KV secrets engine - version 2"
+            url: https://openbao.org/docs/secrets/kv/kv-v2/
+          - name: "kv rollback command"
+            url: https://openbao.org/docs/commands/kv/rollback/
+          - name: "kv undelete command"
+            url: https://openbao.org/docs/commands/kv/undelete/
+      - type: reading
+        title: Summary
+        path: sections/section-010/module-01/course-04-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-010/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Clean Up A KV Mount Before An Audit Capstone"
+        path: sections/section-010/capstone/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 30m
+        topic: kv
+        task_kind: troubleshooting
+        tags: [kv-v2, destroy, rollback, check-and-set, kv-metadata, max-versions]
+        learning_goals:
+          - Remove leaked data for good by destroying a version instead of deleting it
+          - Require check-and-set on a secret and set a default version limit for the whole mount
+          - Prove the clean-up without losing the history of the secrets
+        resources:
+          - name: "KV secrets engine - version 2"
+            url: https://openbao.org/docs/secrets/kv/kv-v2/
+          - name: "kv destroy command"
+            url: https://openbao.org/docs/commands/kv/destroy/
+          - name: "kv metadata command"
+            url: https://openbao.org/docs/commands/kv/metadata/
+
+  - id: module-020
+    title: "Certificates With The PKI Engine"
+    description: >
+      An internal certificate authority with the PKI engine: a root CA, an
+      intermediate CA signed through a certificate signing request, roles that
+      limit names and lifetimes, issuing and checking certificates, revocation
+      and the URLs a certificate carries.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-020/README.md
+
+      - type: reading
+        title: "Run An Internal Certificate Authority With The PKI Engine"
+        path: sections/section-020/module-01/course.md
+      - type: reading
+        title: "The PKI Engine And A Root CA"
+        path: sections/section-020/module-01/course-01-pki-engine-and-root-ca.md
+      - type: reading
+        title: "An Intermediate CA Signed By The Root"
+        path: sections/section-020/module-01/course-02-intermediate-ca.md
+      - type: reading
+        title: "Roles, Issuing Certificates And Revocation"
+        path: sections/section-020/module-01/course-03-roles-issuing-and-revocation.md
+      - type: reading
+        title: Question
+        path: sections/section-020/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Build A Two-Tier CA For The Inventory Services Lab"
+        path: sections/section-020/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 30m
+        topic: pki
+        task_kind: build
+        tags: [pki, root-ca, intermediate-ca, csr, pki-role, issue-certificate, issuing-urls, openssl]
+        learning_goals:
+          - Build a root CA and an intermediate CA signed by it through a certificate signing request
+          - Write a role that issues certificates only for names under inventory.svc for at most 72 hours
+          - Prove a certificate verifies against the whole chain with openssl
+        resources:
+          - name: "PKI secrets engine"
+            url: https://openbao.org/docs/secrets/pki/
+          - name: "PKI quick start - root CA setup"
+            url: https://openbao.org/docs/secrets/pki/quick-start-root-ca/
+          - name: "PKI quick start - intermediate CA setup"
+            url: https://openbao.org/docs/secrets/pki/quick-start-intermediate-ca/
+          - name: "PKI secrets engine - considerations"
+            url: https://openbao.org/docs/secrets/pki/considerations/
+      - type: reading
+        title: Summary
+        path: sections/section-020/module-01/course-04-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-020/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Repair A Broken Certificate Chain Capstone"
+        path: sections/section-020/capstone/labs/lab-01
+        difficulty: advanced
+        estimated_duration: 35m
+        topic: pki
+        task_kind: troubleshooting
+        tags: [pki, intermediate-ca, csr, pki-role, crl, issuing-urls, openssl]
+        learning_goals:
+          - Find why services cannot get certificates from an intermediate CA
+          - Sign and install the intermediate, fix its role and its URLs, and keep the original root CA
+          - Prove the chain with openssl and a certificate that carries the CRL URL
+        resources:
+          - name: "PKI quick start - intermediate CA setup"
+            url: https://openbao.org/docs/secrets/pki/quick-start-intermediate-ca/
+          - name: "PKI secrets engine - considerations"
+            url: https://openbao.org/docs/secrets/pki/considerations/
+
+  - id: module-030
+    title: "Dynamic Database Credentials"
+    description: >
+      Dynamic secrets with the database secrets engine: the connection and
+      its administrative user, roles that create PostgreSQL users with SQL,
+      leases with renewal, revocation and expiry, rotating the root credential
+      and static roles.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-030/README.md
+
+      - type: reading
+        title: "Generate Short-Lived Database Credentials"
+        path: sections/section-030/module-01/course.md
+      - type: reading
+        title: "Dynamic Secrets And The Database Secrets Engine"
+        path: sections/section-030/module-01/course-01-dynamic-secrets-and-the-database-engine.md
+      - type: reading
+        title: "Roles, Credentials And Their Leases"
+        path: sections/section-030/module-01/course-02-roles-credentials-and-leases.md
+      - type: reading
+        title: Question
+        path: sections/section-030/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Give The Inventory App Expiring Database Credentials Lab"
+        path: sections/section-030/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: database
+        task_kind: build
+        tags: [database-engine, postgresql, dynamic-credentials, database-role, lease, lease-revoke, ttl]
+        learning_goals:
+          - Connect the database secrets engine to PostgreSQL as a user that is not the superuser
+          - Write a role that creates read-only users with a lease of 10 minutes
+          - Prove a new user can read, cannot write and is removed when its lease is revoked
+        resources:
+          - name: "Database secrets engine"
+            url: https://openbao.org/docs/secrets/databases/
+          - name: "PostgreSQL database secrets engine"
+            url: https://openbao.org/docs/secrets/databases/postgresql/
+          - name: "Lease, renew, and revoke"
+            url: https://openbao.org/docs/concepts/lease/
+      - type: reading
+        title: "Rotating The Root Credential And Static Roles"
+        path: sections/section-030/module-01/course-03-root-rotation-and-static-roles.md
+      - type: reading
+        title: Summary
+        path: sections/section-030/module-01/course-04-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-030/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Clean Up After A Database Credential Leak Capstone"
+        path: sections/section-030/capstone/labs/lab-01
+        difficulty: advanced
+        estimated_duration: 30m
+        topic: leases
+        task_kind: troubleshooting
+        tags: [database-role, lease, revoke-prefix, rotate-root, ttl, postgresql]
+        learning_goals:
+          - Shorten the leases a database role gives out
+          - Revoke every leaked credential at once with a prefix and prove the database users are gone
+          - Rotate the root credential so the old connection password stops working
+        resources:
+          - name: "Lease, renew, and revoke"
+            url: https://openbao.org/docs/concepts/lease/
+          - name: "lease revoke command"
+            url: https://openbao.org/docs/commands/lease/revoke/
+          - name: "Database secrets engine"
+            url: https://openbao.org/docs/secrets/databases/
+
+  - id: module-040
+    title: "Encryption As A Service With Transit"
+    description: >
+      Encryption as a service with the Transit engine: named keys that never
+      leave OpenBao, encrypting and decrypting Base64 data, data keys, key
+      rotation, rewrapping stored ciphertext and retiring old key versions.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-040/README.md
+
+      - type: reading
+        title: "Encrypt Data With The Transit Engine"
+        path: sections/section-040/module-01/course.md
+      - type: reading
+        title: "Encryption As A Service"
+        path: sections/section-040/module-01/course-01-encryption-as-a-service.md
+      - type: reading
+        title: "Key Rotation, Rewrap And Retiring Old Versions"
+        path: sections/section-040/module-01/course-02-key-rotation-and-rewrap.md
+      - type: reading
+        title: Question
+        path: sections/section-040/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Rewrap Records And Retire Old Key Versions Lab"
+        path: sections/section-040/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 20m
+        topic: transit
+        task_kind: migration
+        tags: [transit, rewrap, key-rotation, min-decryption-version, decrypt]
+        learning_goals:
+          - Find which key version each stored ciphertext uses
+          - Rewrap every stored ciphertext to the newest key version without seeing the plaintext
+          - Retire the old key versions and prove every record still decrypts
+        resources:
+          - name: "Transit secrets engine"
+            url: https://openbao.org/docs/secrets/transit/
+      - type: reading
+        title: Summary
+        path: sections/section-040/module-01/course-03-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-040/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Rotate Everything After A Leak Capstone"
+        path: sections/section-040/capstone/labs/lab-01
+        difficulty: advanced
+        estimated_duration: 45m
+        topic: transit
+        task_kind: troubleshooting
+        tags: [destroy, rollback, key-rotation, rewrap, min-decryption-version, revoke-prefix, rotate-root]
+        learning_goals:
+          - Remove a leaked KV version for good and restore the last clean data
+          - Rotate a Transit key, rewrap the stored data and retire the leaked key version
+          - Revoke leaked database credentials and rotate the connection password
+        resources:
+          - name: "Transit secrets engine"
+            url: https://openbao.org/docs/secrets/transit/
+          - name: "KV secrets engine - version 2"
+            url: https://openbao.org/docs/secrets/kv/kv-v2/
+          - name: "Database secrets engine"
+            url: https://openbao.org/docs/secrets/databases/

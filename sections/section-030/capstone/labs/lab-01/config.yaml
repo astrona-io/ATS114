@@ -1,0 +1,60 @@
+# Clean Up After A Database Credential Leak
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-114-capstone-030"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-openbao"
+      description: "Installs Helm 3.22.1, the bao CLI 2.7.1 and OpenBao 2.7.1, initialized and unsealed, plus PostgreSQL 17"
+      type: "file"
+      source: "bootstrap/01-install-openbao.sh"
+    - name: "ats-114-capstone-030-setup"
+      description: "Creates the starting state the task works from"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "The tester pod (namespace clients)."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+
+testing:
+  init:
+    - name: "wait-for-openbao"
+      description: "Waits until OpenBao is unsealed and answers from the tester pod"
+      type: "file"
+      source: "testing/wait-for-openbao.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-role-ttl"
+      description: "Confirms the role inventory-readonly gives leases of 15 minutes, at most 1 hour"
+      type: "file"
+      source: "validation/validate-role-ttl.sh"
+    - name: "validate-leaked-leases-revoked"
+      description: "Confirms the four leaked leases are revoked and their database users are gone"
+      type: "file"
+      source: "validation/validate-leaked-leases-revoked.sh"
+    - name: "validate-root-rotated"
+      description: "Confirms OpenBao rotated the password of openbao_admin"
+      type: "file"
+      source: "validation/validate-root-rotated.sh"
+    - name: "validate-new-credentials"
+      description: "Confirms OpenBao still creates working read-only credentials"
+      type: "file"
+      source: "validation/validate-new-credentials.sh"
+
+teardown:
+  keepCluster: false

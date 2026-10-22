@@ -1,0 +1,64 @@
+# Clean Up A KV Mount Before An Audit
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-114-capstone-010"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-openbao"
+      description: "Installs Helm 3.22.1, the bao CLI 2.7.1 and OpenBao 2.7.1, initialized and unsealed"
+      type: "file"
+      source: "bootstrap/01-install-openbao.sh"
+    - name: "ats-114-capstone-010-setup"
+      description: "Creates the starting state the task works from"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "The tester pod (namespace clients)."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+
+testing:
+  init:
+    - name: "wait-for-openbao"
+      description: "Waits until OpenBao is unsealed and answers from the tester pod"
+      type: "file"
+      source: "testing/wait-for-openbao.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-leaked-version-destroyed"
+      description: "Confirms version 3 of inventory/db is destroyed, not only deleted"
+      type: "file"
+      source: "validation/validate-leaked-version-destroyed.sh"
+    - name: "validate-current-data-clean"
+      description: "Confirms the current version of inventory/db holds the data of version 2 without the leaked field"
+      type: "file"
+      source: "validation/validate-current-data-clean.sh"
+    - name: "validate-payments-cas"
+      description: "Confirms inventory/payments requires check-and-set and keeps its data"
+      type: "file"
+      source: "validation/validate-payments-cas.sh"
+    - name: "validate-mount-max-versions"
+      description: "Confirms the secret mount keeps at most 10 versions per secret by default"
+      type: "file"
+      source: "validation/validate-mount-max-versions.sh"
+    - name: "validate-not-recreated"
+      description: "Confirms both secrets keep their original version history"
+      type: "file"
+      source: "validation/validate-not-recreated.sh"
+
+teardown:
+  keepCluster: false
