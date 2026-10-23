@@ -29,7 +29,7 @@ Before you rotate, prove the old password works, so you can see the difference a
 
 ```sh
 kubectl -n data exec -i deploy/postgres -- env PGPASSWORD=openbao-admin-password \
-    psql -h 127.0.0.1 -U openbao_admin -d inventory -c 'SELECT 1'
+    psql -h postgres.data -U openbao_admin -d inventory -c 'SELECT 1'
 ```
 
 The query returns `1`. Now rotate, and try the old password again:
@@ -37,7 +37,7 @@ The query returns `1`. Now rotate, and try the old password again:
 ```sh
 bao write -force database/rotate-root/inventory-db
 kubectl -n data exec -i deploy/postgres -- env PGPASSWORD=openbao-admin-password \
-    psql -h 127.0.0.1 -U openbao_admin -d inventory -c 'SELECT 1'
+    psql -h postgres.data -U openbao_admin -d inventory -c 'SELECT 1'
 ```
 
 `-force` sends the write without data, because this endpoint needs none. After the rotation, the same `psql` command fails with a password authentication error: the password you know is no longer valid. OpenBao still works, because it uses the new password it stored. Read a credential from `database/creds/inventory-readonly` to see that for yourself.
@@ -52,7 +52,7 @@ First create the user as the database administrator. `GRANT inventory_report TO 
 
 ```sh
 kubectl -n data exec -i deploy/postgres -- env PGPASSWORD=postgres-admin-password \
-    psql -h 127.0.0.1 -U postgres -d inventory \
+    psql -h postgres.data -U postgres -d inventory \
     -c 'CREATE ROLE inventory_report LOGIN' \
     -c 'GRANT SELECT ON items TO inventory_report' \
     -c 'GRANT inventory_report TO openbao_admin WITH ADMIN OPTION'

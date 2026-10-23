@@ -71,7 +71,7 @@ bao write -force database/rotate-root/inventory-db
 
 ```sh
 kubectl -n data exec -i deploy/postgres -- env PGPASSWORD=openbao-admin-password \
-    psql -h 127.0.0.1 -U openbao_admin -d inventory -c 'SELECT 1'
+    psql -h postgres.data -U openbao_admin -d inventory -c 'SELECT 1'
 bao read database/creds/inventory-readonly
 ```
 

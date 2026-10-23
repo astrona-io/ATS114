@@ -59,7 +59,7 @@ The three lines show the lease ID (it starts with `database/creds/inventory-read
 DB_USER=$(jq -r '.data.username' creds.json)
 DB_PASSWORD=$(jq -r '.data.password' creds.json)
 kubectl -n data exec -i deploy/postgres -- env PGPASSWORD="$DB_PASSWORD" \
-    psql -h 127.0.0.1 -U "$DB_USER" -d inventory -c 'SELECT * FROM items'
+    psql -h postgres.data -U "$DB_USER" -d inventory -c 'SELECT * FROM items'
 ```
 
 The query returns the three rows of `items`. An `INSERT` with the same user fails with a permission error, because the role granted `SELECT` only.
@@ -81,7 +81,7 @@ Revoking the lease made OpenBao drop the user in PostgreSQL. Check it as the dat
 
 ```sh
 kubectl -n data exec -i deploy/postgres -- env PGPASSWORD=postgres-admin-password \
-    psql -h 127.0.0.1 -U postgres -d inventory -c '\du'
+    psql -h postgres.data -U postgres -d inventory -c '\du'
 ```
 
 The user that started with `v-` is gone. A lease that is not renewed ends the same way, on its own, after 10 minutes.

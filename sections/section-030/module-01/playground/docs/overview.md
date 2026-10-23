@@ -33,7 +33,7 @@ export BAO_TOKEN=$(kubectl -n openbao get secret openbao-init -o jsonpath='{.dat
 psql_as() {
   local db_user="$1" db_password="$2"; shift 2
   kubectl -n data exec -i deploy/postgres -- env PGPASSWORD="$db_password" \
-    psql -h 127.0.0.1 -U "$db_user" -d inventory "$@"
+    psql -h postgres.data -U "$db_user" -d inventory "$@"
 }
 list_db_users() {
   psql_as postgres postgres-admin-password -c '\du'

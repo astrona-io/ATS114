@@ -31,7 +31,7 @@ in_tester() { kubectl -n clients exec -i deploy/tester -- "$@"; }
 psql_as() {
   local db_user="$1" db_password="$2"; shift 2
   kubectl -n data exec -i deploy/postgres -- env PGPASSWORD="$db_password" \
-    psql -h 127.0.0.1 -U "$db_user" -d inventory -v ON_ERROR_STOP=1 -tA "$@"
+    psql -h postgres.data -U "$db_user" -d inventory -v ON_ERROR_STOP=1 -tA "$@"
 }
 pass() { echo "PASS: $*"; exit 0; }
 fail() { echo "FAIL: $*"; exit 1; }

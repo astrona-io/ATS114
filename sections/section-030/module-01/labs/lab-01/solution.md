@@ -61,7 +61,7 @@ bao read -format=json database/creds/inventory-readonly > creds.json
 DB_USER=$(jq -r '.data.username' creds.json)
 DB_PASSWORD=$(jq -r '.data.password' creds.json)
 kubectl -n data exec -i deploy/postgres -- env PGPASSWORD="$DB_PASSWORD" \
-    psql -h 127.0.0.1 -U "$DB_USER" -d inventory -c 'SELECT count(*) FROM items'
+    psql -h postgres.data -U "$DB_USER" -d inventory -c 'SELECT count(*) FROM items'
 bao lease revoke "$(jq -r '.lease_id' creds.json)"
 ```
 

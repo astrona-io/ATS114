@@ -34,11 +34,11 @@ export BAO_ADDR=http://openbao.localtest.me:8200
 export BAO_TOKEN=$(kubectl -n openbao get secret openbao-init -o jsonpath='{.data.root-token}' | base64 -d)
 ```
 
-Before OpenBao touches the database, look at it as the database administrator. This runs `psql` inside the PostgreSQL pod and lists the roles, PostgreSQL's name for users:
+Before OpenBao touches the database, look at it as the database administrator. This runs `psql` inside the PostgreSQL pod and lists the roles, PostgreSQL's name for users. It connects through the Service `postgres.data`, not to `127.0.0.1`: the official PostgreSQL image trusts every connection from inside the pod over `127.0.0.1` without checking the password, so only a connection through the Service shows whether a password still works:
 
 ```sh
 kubectl -n data exec -i deploy/postgres -- env PGPASSWORD=postgres-admin-password \
-    psql -h 127.0.0.1 -U postgres -d inventory -c '\du'
+    psql -h postgres.data -U postgres -d inventory -c '\du'
 ```
 
 The list shows `postgres`, the superuser, and `openbao_admin`, which has the attribute `Create role` but is not a superuser. `openbao_admin` also holds `SELECT`, `INSERT`, `UPDATE` and `DELETE` on the tables, with the right to pass them on. That is all OpenBao needs to create users and give them access.
