@@ -1,6 +1,21 @@
 #!/usr/bin/env bash
 # Grader: Confirms pki_int holds an intermediate CA named Inventory Intermediate CA, signed by the root CA.
 set -uo pipefail
+# grep -q stops reading at the first match; under pipefail the command
+# writing into the pipe then fails with SIGPIPE and a match looks like a
+# failure. This wrapper reads all input instead and keeps grep's exit status.
+grep() {
+  local arg quiet=0 args=()
+  for arg in "$@"; do
+    case "$arg" in
+      --quiet|--silent) quiet=1 ;;
+      --*) args+=("$arg") ;;
+      -*q*) quiet=1; [ "$arg" = "-q" ] || args+=("${arg//q/}") ;;
+      *) args+=("$arg") ;;
+    esac
+  done
+  if [ "$quiet" = 1 ]; then command grep "${args[@]}" >/dev/null; else command grep "$@"; fi
+}
 
 # --- shared helpers (the same block in every ATS114 environment) ---------
 # ROOT_TOKEN is the lab-only root token from the Secret openbao-init. A real
