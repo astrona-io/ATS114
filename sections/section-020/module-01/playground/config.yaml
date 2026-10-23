@@ -7,7 +7,6 @@ metadata:
   name: "ats-114-playground-020-01"
   docs:
     guide: "docs/overview.md"
-
 bootstrap:
   init:
     - name: "prepare"
@@ -19,6 +18,10 @@ bootstrap:
       description: "The tester pod (namespace clients)."
       type: "file"
       source: "manifests/lab-start.yaml"
-
 teardown:
   keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - nicolaka/netshoot:v0.13
+      - quay.io/openbao/openbao:2.7.1
