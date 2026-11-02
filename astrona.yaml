@@ -30,8 +30,6 @@ training:
     name: OpenBao
     code: OPENBAO
     provider: Astrona
-    domain: Secrets Engines & Dynamic Credential Lifecycle
-    weight: 25
 
 modules:
 
