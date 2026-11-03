@@ -1,0 +1,245 @@
+# Knowledge check for section 030. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats114-030
+course_id: ATS114
+exam_code: OPENBAO
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-030
+  title: "Dynamic Database Credentials"
+placement:
+  position: after
+  reading: sections/section-030/capstone/labs/lab-01/question.md
+questions:
+  - id: ats114-030-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Define a dynamic secret"
+    source_readings:
+      - sections/section-030/module-01/course-01-dynamic-secrets-and-the-database-engine.md
+    prompt: "What makes a secret from the database secrets engine dynamic?"
+    options:
+      - id: a
+        text: "OpenBao creates it at the moment of the request, in a system it controls, such as a new PostgreSQL user."
+        explanation: "Correct. OpenBao can also take it back."
+      - id: b
+        text: "A person types it into OpenBao and it changes every year."
+        explanation: "Not correct. That describes a static secret."
+      - id: c
+        text: "It is stored in a KV mount with many versions."
+        explanation: "Not correct. KV holds static secrets."
+      - id: d
+        text: "It is the same for every application."
+        explanation: "Not correct. Each request gets its own value."
+    correct_option: a
+    explanation: "Correct. OpenBao can also take it back."
+
+  - id: ats114-030-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Define a lease"
+    source_readings:
+      - sections/section-030/module-01/course-01-dynamic-secrets-and-the-database-engine.md
+    prompt: "What is a lease in OpenBao?"
+    options:
+      - id: a
+        text: "A copy of the database password stored in the lease ID."
+        explanation: "Not correct. The lease ID is a handle. It does not hold the password."
+      - id: b
+        text: "A record with an ID, a duration and a renewable flag. When it ends, OpenBao runs the clean-up, such as dropping the PostgreSQL user."
+        explanation: "Correct. A lease is how OpenBao takes a dynamic secret back."
+      - id: c
+        text: "A policy that lets a token read a path."
+        explanation: "Not correct. Policies and leases are different things."
+      - id: d
+        text: "A permanent grant that cannot be revoked."
+        explanation: "Not correct. A lease ends by time or by revocation."
+    correct_option: b
+    explanation: "Correct. A lease is how OpenBao takes a dynamic secret back."
+
+  - id: ats114-030-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Choose a safe connection user"
+    source_readings:
+      - sections/section-030/module-01/course-01-dynamic-secrets-and-the-database-engine.md
+    prompt: "Why does the connection `inventory-db` use `openbao_admin` and not the PostgreSQL superuser?"
+    options:
+      - id: a
+        text: "The superuser cannot connect from inside the cluster."
+        explanation: "Not correct. The reason is the rights, not the network."
+      - id: b
+        text: "Only `openbao_admin` can have a password."
+        explanation: "Not correct. The superuser has a password too."
+      - id: c
+        text: "With the superuser, anyone who can read credentials is one step from full control of the database."
+        explanation: "Correct. `openbao_admin` can only create roles and grant what they need."
+      - id: d
+        text: "The plugin refuses the name `postgres`."
+        explanation: "Not correct. The plugin does not check the user name."
+    correct_option: c
+    explanation: "Correct. `openbao_admin` can only create roles and grant what they need."
+
+  - id: ats114-030-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Keep the placeholders in the URL"
+    source_readings:
+      - sections/section-030/module-01/course-01-dynamic-secrets-and-the-database-engine.md
+    prompt: "Why does `connection_url` keep `{{username}}` and `{{password}}` instead of the real password?"
+    options:
+      - id: a
+        text: "PostgreSQL requires the double braces."
+        explanation: "Not correct. They are OpenBao placeholders."
+      - id: b
+        text: "They make the connection use TLS."
+        explanation: "Not correct. TLS is set by `sslmode`."
+      - id: c
+        text: "They hide the database host name."
+        explanation: "Not correct. The host is still in the URL."
+      - id: d
+        text: "OpenBao fills them in, so the root credential can be rotated later."
+        explanation: "Correct. The URL then does not hold the secret."
+    correct_option: d
+    explanation: "Correct. The URL then does not hold the secret."
+
+  - id: ats114-030-q05
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Reach PostgreSQL from OpenBao"
+    source_readings:
+      - sections/section-030/module-01/course-01-dynamic-secrets-and-the-database-engine.md
+    prompt: "OpenBao runs in a pod in the cluster. Which host in `connection_url` reaches PostgreSQL?"
+    options:
+      - id: a
+        text: "`postgres.data`, the Service `postgres` in the namespace `data`."
+        explanation: "Correct. Use the Service name."
+      - id: b
+        text: "`localhost`"
+        explanation: "Not correct. In the OpenBao pod, `localhost` is OpenBao itself."
+      - id: c
+        text: "`127.0.0.1`"
+        explanation: "Not correct. This is the same as `localhost`."
+      - id: d
+        text: "`openbao.localtest.me`"
+        explanation: "Not correct. This name points to the OpenBao port-forward on your machine."
+    correct_option: a
+    explanation: "Correct. Use the Service name."
+
+  - id: ats114-030-q06
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Request a credential"
+    source_readings:
+      - sections/section-030/module-01/course-02-roles-credentials-and-leases.md
+    prompt: "Which request makes the database engine create a new PostgreSQL user?"
+    options:
+      - id: a
+        text: "Writing `database/config/inventory-db`"
+        explanation: "Not correct. This only stores the connection."
+      - id: b
+        text: "Reading `database/creds/inventory-readonly`"
+        explanation: "Correct. The read is the request that creates the user."
+      - id: c
+        text: "Reading `database/config/inventory-db`"
+        explanation: "Not correct. This shows the connection and creates nobody."
+      - id: d
+        text: "Writing `database/rotate-root/inventory-db`"
+        explanation: "Not correct. This changes the password of the connection user."
+    correct_option: b
+    explanation: "Correct. The read is the request that creates the user."
+
+  - id: ats114-030-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Compare default_ttl and max_ttl"
+    source_readings:
+      - sections/section-030/module-01/course-02-roles-credentials-and-leases.md
+    prompt: "A role has `default_ttl=10m` and `max_ttl=1h`. What is `max_ttl`?"
+    options:
+      - id: a
+        text: "The lease a new credential gets."
+        explanation: "Not correct. That is `default_ttl`."
+      - id: b
+        text: "The time after which OpenBao rotates the root credential."
+        explanation: "Not correct. Root rotation is a separate request."
+      - id: c
+        text: "The longest a credential can live, even with renewals."
+        explanation: "Correct. A renewal can never go past it."
+      - id: d
+        text: "The longest a database connection may stay open."
+        explanation: "Not correct. It limits the lease, not the connection."
+    correct_option: c
+    explanation: "Correct. A renewal can never go past it."
+
+  - id: ats114-030-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "End a lease early"
+    source_readings:
+      - sections/section-030/module-01/course-02-roles-credentials-and-leases.md
+    prompt: "Which value does `bao lease revoke` take to end a credential at once?"
+    options:
+      - id: a
+        text: "The database user name that starts with `v-`."
+        explanation: "Not correct. The command takes the lease ID."
+      - id: b
+        text: "The name of the role."
+        explanation: "Not correct. A role name would not name one credential."
+      - id: c
+        text: "The password of the credential."
+        explanation: "Not correct. Passwords are not used to find leases."
+      - id: d
+        text: "The lease ID from the read response."
+        explanation: "Correct. Keep it with the credential."
+    correct_option: d
+    explanation: "Correct. Keep it with the credential."
+
+  - id: ats114-030-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain root rotation"
+    source_readings:
+      - sections/section-030/module-01/course-03-root-rotation-and-static-roles.md
+    prompt: "What does `bao write -force database/rotate-root/inventory-db` do?"
+    options:
+      - id: a
+        text: "It sets a new random password for the connection user in the database and stores it where only OpenBao can use it."
+        explanation: "Correct. People can no longer log in with the old password."
+      - id: b
+        text: "It revokes every lease of the connection."
+        explanation: "Not correct. Leases are revoked with `bao lease revoke`."
+      - id: c
+        text: "It drops the user `openbao_admin`."
+        explanation: "Not correct. The user stays, with a new password."
+      - id: d
+        text: "It prints the new password once."
+        explanation: "Not correct. Nobody receives the new password."
+    correct_option: a
+    explanation: "Correct. People can no longer log in with the old password."
+
+  - id: ats114-030-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Choose a static role"
+    source_readings:
+      - sections/section-030/module-01/course-03-root-rotation-and-static-roles.md
+    prompt: "A reporting tool is configured with the user name `inventory_report` and cannot change it. Which role type fits?"
+    options:
+      - id: a
+        text: "A dynamic role, because it makes a new user name for each request."
+        explanation: "Not correct. The tool needs the same name every time."
+      - id: b
+        text: "A static role, which rotates the password of that one existing user and has no lease."
+        explanation: "Correct. Read it at `database/static-creds/<role>`."
+      - id: c
+        text: "A dynamic role with a long `max_ttl`."
+        explanation: "Not correct. It would still create new user names."
+      - id: d
+        text: "A static role with a lease of one hour."
+        explanation: "Not correct. Static roles have no lease."
+    correct_option: b
+    explanation: "Correct. Read it at `database/static-creds/<role>`."

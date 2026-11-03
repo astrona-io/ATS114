@@ -1,0 +1,245 @@
+# Knowledge check for section 010. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats114-010
+course_id: ATS114
+exam_code: OPENBAO
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-010
+  title: "Static Secrets With KV Version 2"
+placement:
+  position: after
+  reading: sections/section-010/capstone/labs/lab-01/question.md
+questions:
+  - id: ats114-010-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Enable the KV version 2 engine"
+    source_readings:
+      - sections/section-010/module-01/course-01-secrets-engines-and-kv-v2.md
+    prompt: "Which command enables the KV version 2 engine at the path `secret/`?"
+    options:
+      - id: a
+        text: "`bao secrets enable -path=secret kv-v2`"
+        explanation: "Correct. The type must be `kv-v2` to keep a version history."
+      - id: b
+        text: "`bao secrets enable -path=secret kv`"
+        explanation: "Not correct. This creates version 1, which keeps no history."
+      - id: c
+        text: "`bao kv put -mount=secret enable=true`"
+        explanation: "Not correct. `bao kv put` writes a secret. It does not enable an engine."
+      - id: d
+        text: "`bao auth enable -path=secret kv-v2`"
+        explanation: "Not correct. `bao auth enable` adds an authentication method, not a secrets engine."
+    correct_option: a
+    explanation: "Correct. The type must be `kv-v2` to keep a version history."
+
+  - id: ats114-010-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Name the paths behind the bao kv commands"
+    source_readings:
+      - sections/section-010/module-01/course-01-secrets-engines-and-kv-v2.md
+    prompt: "In the KV version 2 mount `secret/`, which full path holds the data of the secret `inventory/db`, as an HTTP request or a policy must write it?"
+    options:
+      - id: a
+        text: "`secret/inventory/db`"
+        explanation: "Not correct. This is the path for KV version 1. Version 2 needs `data/`."
+      - id: b
+        text: "`secret/data/inventory/db`"
+        explanation: "Correct. Only the `bao kv` commands add `data/` for you."
+      - id: c
+        text: "`secret/metadata/inventory/db`"
+        explanation: "Not correct. This path holds the version history and the settings, not the data."
+      - id: d
+        text: "`secret/kv/inventory/db`"
+        explanation: "Not correct. There is no `kv/` part in the path of a secret."
+    correct_option: b
+    explanation: "Correct. Only the `bao kv` commands add `data/` for you."
+
+  - id: ats114-010-q03
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Change one field of a secret"
+    source_readings:
+      - sections/section-010/module-01/course-01-secrets-engines-and-kv-v2.md
+    prompt: "The secret `inventory/db` has the fields `username` and `password`. Which command changes only `password` and keeps `username`?"
+    options:
+      - id: a
+        text: "`bao kv put -mount=secret inventory/db password=Inv-2026-b`"
+        explanation: "Not correct. `put` replaces the whole secret, so `username` is gone in the new version."
+      - id: b
+        text: "`bao kv rollback -mount=secret inventory/db password=Inv-2026-b`"
+        explanation: "Not correct. `rollback` copies an older version. It does not set fields."
+      - id: c
+        text: "`bao kv patch -mount=secret inventory/db password=Inv-2026-b`"
+        explanation: "Correct. `patch` changes only the fields you name."
+      - id: d
+        text: "`bao kv metadata put -mount=secret inventory/db password=Inv-2026-b`"
+        explanation: "Not correct. `metadata put` changes settings of the secret, not its data."
+    correct_option: c
+    explanation: "Correct. `patch` changes only the fields you name."
+
+  - id: ats114-010-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Separate the data path from the metadata path in a policy"
+    source_readings:
+      - sections/section-010/module-01/course-01-secrets-engines-and-kv-v2.md
+    prompt: "A policy allows `read` on `secret/data/inventory/*` and nothing else. What can a token with this policy do?"
+    options:
+      - id: a
+        text: "Read the values and also change `max_versions`."
+        explanation: "Not correct. Changing the settings needs access to `secret/metadata/`."
+      - id: b
+        text: "Read the version history of each secret."
+        explanation: "Not correct. The version list is under `secret/metadata/`."
+      - id: c
+        text: "Nothing, because every KV request also needs `secret/config`."
+        explanation: "Not correct. Reading a secret needs only the data path."
+      - id: d
+        text: "Read the values of the secrets, but not change settings such as `max_versions`."
+        explanation: "Correct. The settings are under `secret/metadata/`, which the policy does not cover."
+    correct_option: d
+    explanation: "Correct. The settings are under `secret/metadata/`, which the policy does not cover."
+
+  - id: ats114-010-q05
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Tell delete, destroy and undelete apart"
+    source_readings:
+      - sections/section-010/module-01/course-02-versions-deletes-and-rollback.md
+    prompt: "A version of a secret leaked and must never be readable again. Which command do you run on it?"
+    options:
+      - id: a
+        text: "`bao kv destroy`"
+        explanation: "Correct. Destroy removes the data from storage and cannot be undone."
+      - id: b
+        text: "`bao kv delete`"
+        explanation: "Not correct. A soft delete keeps the data in storage, and `undelete` brings it back."
+      - id: c
+        text: "`bao kv undelete`"
+        explanation: "Not correct. This reverses a soft delete. It removes nothing."
+      - id: d
+        text: "`bao kv rollback`"
+        explanation: "Not correct. This writes a new version from an old one. It removes nothing."
+    correct_option: a
+    explanation: "Correct. Destroy removes the data from storage and cannot be undone."
+
+  - id: ats114-010-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain what a rollback writes"
+    source_readings:
+      - sections/section-010/module-01/course-02-versions-deletes-and-rollback.md
+    prompt: "The current version of a secret is 3 and holds a bad value. You run `bao kv rollback -mount=secret -version=2 inventory/db`. What is the result?"
+    options:
+      - id: a
+        text: "Version 3 is removed and version 2 becomes the current version again."
+        explanation: "Not correct. Rollback never removes a version and never renumbers."
+      - id: b
+        text: "A new version 4 is written with the data of version 2, and version 3 stays in the history."
+        explanation: "Correct. Rollback copies old data into a new version."
+      - id: c
+        text: "Version 3 is destroyed and version 4 is empty."
+        explanation: "Not correct. Rollback does not destroy anything."
+      - id: d
+        text: "Version 2 is changed to hold the data of version 3."
+        explanation: "Not correct. Rollback copies the older data forward. It does not edit old versions."
+    correct_option: b
+    explanation: "Correct. Rollback copies old data into a new version."
+
+  - id: ats114-010-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Set a default for a whole mount"
+    source_readings:
+      - sections/section-010/module-01/course-03-metadata-and-check-and-set.md
+    prompt: "Where do you set a version limit that every secret in the mount `secret/` uses unless it sets its own?"
+    options:
+      - id: a
+        text: "`bao write secret/metadata/config max_versions=10`"
+        explanation: "Not correct. `secret/metadata/config` is a secret path, not the mount configuration."
+      - id: b
+        text: "`bao kv metadata put -mount=secret max_versions=10`"
+        explanation: "Not correct. This command needs a secret path and sets the limit for one secret."
+      - id: c
+        text: "`bao write secret/config max_versions=10`"
+        explanation: "Correct. The mount configuration lives at `secret/config`."
+      - id: d
+        text: "`bao secrets tune -max-lease-ttl=10 secret`"
+        explanation: "Not correct. This changes lease times, not the number of versions."
+    correct_option: c
+    explanation: "Correct. The mount configuration lives at `secret/config`."
+
+  - id: ats114-010-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Find the last good version"
+    source_readings:
+      - sections/section-010/module-01/course-02-versions-deletes-and-rollback.md
+    prompt: "Which command shows the creation time, deletion time and `destroyed` state of every version of `inventory/db`, so you can find the last good one?"
+    options:
+      - id: a
+        text: "`bao kv get -mount=secret -field=version inventory/db`"
+        explanation: "Not correct. This prints only the number of the current version."
+      - id: b
+        text: "`bao secrets list`"
+        explanation: "Not correct. This lists mounts, not versions of a secret."
+      - id: c
+        text: "`bao read secret/config`"
+        explanation: "Not correct. This shows the settings of the whole mount, not the history of a secret."
+      - id: d
+        text: "`bao kv metadata get -mount=secret inventory/db`"
+        explanation: "Correct. It prints one block per version."
+    correct_option: d
+    explanation: "Correct. It prints one block per version."
+
+  - id: ats114-010-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Predict the effect of max_versions"
+    source_readings:
+      - sections/section-010/module-01/course-03-metadata-and-check-and-set.md
+    prompt: "A secret has `max_versions` set to 3 and already holds versions 1, 2 and 3. Someone writes it again. What happens to version 1?"
+    options:
+      - id: a
+        text: "The KV engine removes it for good, data and metadata, when the write is made."
+        explanation: "Correct. The limit is applied on the next write."
+      - id: b
+        text: "The write is rejected until someone destroys version 1."
+        explanation: "Not correct. The engine trims the old version by itself."
+      - id: c
+        text: "It is soft-deleted, and `bao kv undelete` can bring it back."
+        explanation: "Not correct. Trimmed versions are removed, not marked deleted."
+      - id: d
+        text: "Nothing, because the limit applies only to the mount configuration."
+        explanation: "Not correct. A limit on the secret applies to that secret."
+    correct_option: a
+    explanation: "Correct. The limit is applied on the next write."
+
+  - id: ats114-010-q10
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Explain a failed check-and-set write"
+    source_readings:
+      - sections/section-010/module-01/course-03-metadata-and-check-and-set.md
+    prompt: "A secret requires check-and-set. Two scripts both read version 2. The first runs `bao kv put -cas=2` and succeeds. Why does the second script's `-cas=2` write fail?"
+    options:
+      - id: a
+        text: "The secret is locked for one hour after every write."
+        explanation: "Not correct. KV version 2 has no write lock."
+      - id: b
+        text: "Version 2 is no longer the current version, because the first write created version 3."
+        explanation: "Correct. This is the lost update that check-and-set prevents."
+      - id: c
+        text: "`-cas=2` is accepted only once for each secret."
+        explanation: "Not correct. The value must match the current version, not be new."
+      - id: d
+        text: "The second script has no token."
+        explanation: "Not correct. A missing token gives a permission error, not a check-and-set error."
+    correct_option: b
+    explanation: "Correct. This is the lost update that check-and-set prevents."

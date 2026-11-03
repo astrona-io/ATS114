@@ -128,6 +128,10 @@ modules:
             url: https://openbao.org/docs/commands/kv/destroy/
           - name: "kv metadata command"
             url: https://openbao.org/docs/commands/kv/metadata/
+      - type: quiz
+        title: "Knowledge Check: Static Secrets With KV Version 2"
+        path: sections/section-010/quiz.yaml
+        pass_score: 70
 
   - id: module-020
     title: "Certificates With The PKI Engine"
@@ -202,6 +206,10 @@ modules:
             url: https://openbao.org/docs/secrets/pki/quick-start-intermediate-ca/
           - name: "PKI secrets engine - considerations"
             url: https://openbao.org/docs/secrets/pki/considerations/
+      - type: quiz
+        title: "Knowledge Check: Certificates With The PKI Engine"
+        path: sections/section-020/quiz.yaml
+        pass_score: 70
 
   - id: module-030
     title: "Dynamic Database Credentials"
@@ -276,6 +284,10 @@ modules:
             url: https://openbao.org/docs/commands/lease/revoke/
           - name: "Database secrets engine"
             url: https://openbao.org/docs/secrets/databases/
+      - type: quiz
+        title: "Knowledge Check: Dynamic Database Credentials"
+        path: sections/section-030/quiz.yaml
+        pass_score: 70
 
   - id: module-040
     title: "Encryption As A Service With Transit"
@@ -342,3 +354,11 @@ modules:
             url: https://openbao.org/docs/secrets/kv/kv-v2/
           - name: "Database secrets engine"
             url: https://openbao.org/docs/secrets/databases/
+      - type: quiz
+        title: "Knowledge Check: Encryption As A Service With Transit"
+        path: sections/section-040/quiz.yaml
+        pass_score: 70
+      - type: quiz
+        title: "Final Domain Quiz"
+        path: sections/final-domain-quiz.yaml
+        pass_score: 70

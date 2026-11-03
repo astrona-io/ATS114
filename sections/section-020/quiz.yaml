@@ -1,0 +1,245 @@
+# Knowledge check for section 020. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats114-020
+course_id: ATS114
+exam_code: OPENBAO
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-020
+  title: "Certificates With The PKI Engine"
+placement:
+  position: after
+  reading: sections/section-020/capstone/labs/lab-01/question.md
+questions:
+  - id: ats114-020-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Choose how the root key is created"
+    source_readings:
+      - sections/section-020/module-01/course-01-pki-engine-and-root-ca.md
+    prompt: "You generate the root CA with `pki/root/generate/internal`. What happens to the private key?"
+    options:
+      - id: a
+        text: "OpenBao creates it and never returns it."
+        explanation: "Correct. The key stays inside OpenBao."
+      - id: b
+        text: "OpenBao returns it once in the response."
+        explanation: "Not correct. That is the behavior of `exported`."
+      - id: c
+        text: "OpenBao writes it to a file on your machine."
+        explanation: "Not correct. OpenBao does not write the key to your machine."
+      - id: d
+        text: "OpenBao leaves the key out, so you must create it with `openssl`."
+        explanation: "Not correct. OpenBao creates the key itself."
+    correct_option: a
+    explanation: "Correct. The key stays inside OpenBao."
+
+  - id: ats114-020-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain why the mount is tuned"
+    source_readings:
+      - sections/section-020/module-01/course-01-pki-engine-and-root-ca.md
+    prompt: "Why does the module run `bao secrets tune -max-lease-ttl=87600h pki` before it generates the root CA?"
+    options:
+      - id: a
+        text: "It turns on the PKI engine for the mount."
+        explanation: "Not correct. `bao secrets enable pki` does that."
+      - id: b
+        text: "Without it, OpenBao caps the CA certificate at the mount maximum of 32 days."
+        explanation: "Correct. A root CA needs a far longer lifetime."
+      - id: c
+        text: "It makes OpenBao keep the root key in a file."
+        explanation: "Not correct. The command only changes the maximum lease time."
+      - id: d
+        text: "It sets the lifetime of every service certificate to ten years."
+        explanation: "Not correct. It sets a maximum. A role and the request set the real lifetime."
+    correct_option: b
+    explanation: "Correct. A root CA needs a far longer lifetime."
+
+  - id: ats114-020-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain the open CA endpoints"
+    source_readings:
+      - sections/section-020/module-01/course-01-pki-engine-and-root-ca.md
+    prompt: "`curl -s $BAO_ADDR/v1/pki/ca/pem` returns the CA certificate without a token. Why?"
+    options:
+      - id: a
+        text: "The command uses the root token from the environment."
+        explanation: "Not correct. `curl` sends no token here."
+      - id: b
+        text: "The mount is not protected until a policy is written."
+        explanation: "Not correct. Other PKI paths still need a token."
+      - id: c
+        text: "The PKI engine serves CA certificates and revocation lists without a token, so clients can check a certificate."
+        explanation: "Correct. This is on purpose."
+      - id: d
+        text: "The CA certificate is secret, and the server ignores access checks for it."
+        explanation: "Not correct. A CA certificate is public and holds no secret."
+    correct_option: c
+    explanation: "Correct. This is on purpose."
+
+  - id: ats114-020-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know when URLs enter certificates"
+    source_readings:
+      - sections/section-020/module-01/course-03-roles-issuing-and-revocation.md
+    prompt: "You write `pki_int/config/urls` after issuing a certificate for `api.inventory.svc`. Which certificates carry the CRL URL?"
+    options:
+      - id: a
+        text: "Every certificate from `pki_int/`, including `api.inventory.svc`."
+        explanation: "Not correct. Issued certificates are not changed."
+      - id: b
+        text: "Only certificates that the root CA signed."
+        explanation: "Not correct. The setting is on the `pki_int/` mount for its own certificates."
+      - id: c
+        text: "Only certificates that were revoked."
+        explanation: "Not correct. Revocation does not decide which URLs a certificate carries."
+      - id: d
+        text: "Only certificates issued after the change."
+        explanation: "Correct. Earlier certificates keep no URLs."
+    correct_option: d
+    explanation: "Correct. Earlier certificates keep no URLs."
+
+  - id: ats114-020-q05
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Explain why an intermediate CA is used"
+    source_readings:
+      - sections/section-020/module-01/course-02-intermediate-ca.md
+    prompt: "What is the main reason to let an intermediate CA sign service certificates instead of the root CA?"
+    options:
+      - id: a
+        text: "If the intermediate leaks, the root revokes it and signs a new one, and clients change nothing."
+        explanation: "Correct. The root key is used only once per intermediate."
+      - id: b
+        text: "An intermediate CA issues certificates that last longer than the root."
+        explanation: "Not correct. The intermediate must be shorter than the root."
+      - id: c
+        text: "Clients then do not need to trust any CA."
+        explanation: "Not correct. Clients still trust the root."
+      - id: d
+        text: "The root CA cannot sign service certificates at all."
+        explanation: "Not correct. It can. The design avoids using the root key every day."
+    correct_option: a
+    explanation: "Correct. The root key is used only once per intermediate."
+
+  - id: ats114-020-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Revoke a certificate"
+    source_readings:
+      - sections/section-020/module-01/course-03-roles-issuing-and-revocation.md
+    prompt: "A private key of a service leaked. How do you revoke its certificate on the mount `pki_int/`?"
+    options:
+      - id: a
+        text: "`bao write pki_int/revoke common_name=api.inventory.svc`"
+        explanation: "Not correct. The endpoint takes a serial number."
+      - id: b
+        text: "`bao write pki_int/revoke serial_number=<SERIAL>`"
+        explanation: "Correct. Revocation uses the serial number, and the CRL then lists it."
+      - id: c
+        text: "`bao write pki_int/tidy tidy_revoked_certs=true`"
+        explanation: "Not correct. Tidy removes old entries from storage. It revokes nothing."
+      - id: d
+        text: "`bao delete pki_int/roles/inventory-svc`"
+        explanation: "Not correct. Deleting the role does not revoke certificates that exist."
+    correct_option: b
+    explanation: "Correct. Revocation uses the serial number, and the CRL then lists it."
+
+  - id: ats114-020-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Install the signed intermediate"
+    source_readings:
+      - sections/section-020/module-01/course-02-intermediate-ca.md
+    prompt: "`pki/root/sign-intermediate` returned the signed certificate for your CSR. Which step makes `pki_int/` able to sign certificates?"
+    options:
+      - id: a
+        text: "Run `pki/root/sign-intermediate` again on the `pki_int/` mount."
+        explanation: "Not correct. Signing is done on the root mount and was already done."
+      - id: b
+        text: "Write the role `inventory-svc` on the `pki/` mount."
+        explanation: "Not correct. A role does not install a certificate, and roles for services belong on `pki_int/`."
+      - id: c
+        text: "`bao write pki_int/intermediate/set-signed certificate=@intermediate.cert.pem`"
+        explanation: "Correct. Until then the mount has a key but no certificate."
+      - id: d
+        text: "Run `bao write pki_int/config/urls`."
+        explanation: "Not correct. This sets URLs for new certificates. It installs no certificate."
+    correct_option: c
+    explanation: "Correct. Until then the mount has a key but no certificate."
+
+  - id: ats114-020-q08
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Read a role refusal"
+    source_readings:
+      - sections/section-020/module-01/course-03-roles-issuing-and-revocation.md
+    prompt: "A role allows only the domain `inventory.svc`. A request for `www.example.com` fails. What does the failure show?"
+    options:
+      - id: a
+        text: "The intermediate certificate has expired."
+        explanation: "Not correct. The error names the common name, not an expired CA."
+      - id: b
+        text: "The CRL is missing."
+        explanation: "Not correct. The CRL has no effect on issuing."
+      - id: c
+        text: "The request needs a longer `ttl`."
+        explanation: "Not correct. The lifetime is not the problem."
+      - id: d
+        text: "The role refused the name, because every request must fit the rules of its role."
+        explanation: "Correct. This refusal is the purpose of a role."
+    correct_option: d
+    explanation: "Correct. This refusal is the purpose of a role."
+
+  - id: ats114-020-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Fix a role that refuses subdomains"
+    source_readings:
+      - sections/section-020/module-01/course-03-roles-issuing-and-revocation.md
+    prompt: "A role has `allowed_domains=inventory.svc` and nothing else. It refuses `api.inventory.svc`. Which setting fixes this?"
+    options:
+      - id: a
+        text: "`allow_subdomains=true`"
+        explanation: "Correct. It lets the role issue names under the allowed domain."
+      - id: b
+        text: "`max_ttl=72h`"
+        explanation: "Not correct. This limits lifetime, not names."
+      - id: c
+        text: "`ttl=24h` in the request"
+        explanation: "Not correct. The lifetime does not change which names are allowed."
+      - id: d
+        text: "`format=pem_bundle`"
+        explanation: "Not correct. This is an option of `sign-intermediate`, not of a role."
+    correct_option: a
+    explanation: "Correct. It lets the role issue names under the allowed domain."
+
+  - id: ats114-020-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know who keeps the private key"
+    source_readings:
+      - sections/section-020/module-01/course-03-roles-issuing-and-revocation.md
+    prompt: "You request a certificate from `pki_int/issue/inventory-svc`. Where is the private key of the new certificate kept afterwards?"
+    options:
+      - id: a
+        text: "OpenBao stores it and returns it on request."
+        explanation: "Not correct. OpenBao has no copy."
+      - id: b
+        text: "Only in the response. OpenBao does not store it, so the service must keep it."
+        explanation: "Correct. If the service loses it, issue a new certificate."
+      - id: c
+        text: "In the CRL."
+        explanation: "Not correct. The CRL lists serial numbers only."
+      - id: d
+        text: "In the root CA mount `pki/`."
+        explanation: "Not correct. Issued private keys are not stored in any mount."
+    correct_option: b
+    explanation: "Correct. If the service loses it, issue a new certificate."
