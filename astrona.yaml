@@ -13,7 +13,7 @@
 training:
   id: ATS114
   title: "OpenBao: Secrets Engines & Dynamic Credential Lifecycle"
-  maturity: draft
+  maturity: alpha
   description: >
     Training material covering the Secrets Engines & Dynamic Credential
     Lifecycle domain of the OpenBao training path: static secrets with
