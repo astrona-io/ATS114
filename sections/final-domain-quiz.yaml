@@ -1,4 +1,4 @@
-# Final domain knowledge check across all four sections.
+# Final domain knowledge check across all five sections.
 schema_version: 1
 kind: question_bank
 id: ats114-final
@@ -286,3 +286,210 @@ questions:
         explanation: "Not correct. The new key has new material, and old ciphertext is lost."
     correct_option: a
     explanation: "Correct. Retiring first would make records on old versions unreadable."
+
+  - id: ats114-final-q13
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Order TTL limits"
+    source_readings:
+      - sections/section-010/module-02/course-02-tuning-a-mount.md
+    prompt: "A mount has `max_lease_ttl` of 1h and a role asks for 24h. What is the longest lease?"
+    options:
+      - id: a
+        text: "One hour; the shortest limit wins."
+        explanation: "Correct. The mount ceiling applies."
+      - id: b
+        text: "24 hours."
+        explanation: "Not correct. The mount limit still applies."
+      - id: c
+        text: "25 hours."
+        explanation: "Not correct. Limits are not added."
+      - id: d
+        text: "Unlimited."
+        explanation: "Not correct. Limits apply."
+    correct_option: a
+    explanation: "Correct. The mount ceiling applies."
+
+  - id: ats114-final-q14
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Use response wrapping"
+    source_readings:
+      - sections/section-010/module-03/course-02-response-wrapping.md
+    prompt: "What does response wrapping hand to the receiver instead of the secret?"
+    options:
+      - id: a
+        text: "The secret in a lease."
+        explanation: "Not correct. A wrapping token is handed over."
+      - id: b
+        text: "A copy of the root token."
+        explanation: "Not correct. The root token is not shared."
+      - id: c
+        text: "A policy."
+        explanation: "Not correct. A policy is not the secret."
+      - id: d
+        text: "A single-use wrapping token that can be unwrapped once."
+        explanation: "Correct. The secret stays in a cubbyhole until unwrapped."
+    correct_option: d
+    explanation: "Correct. The secret stays in a cubbyhole until unwrapped."
+
+  - id: ats114-final-q15
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Rotate a root"
+    source_readings:
+      - sections/section-020/module-02/course-03-rotating-a-root-ca.md
+    prompt: "What is the safe order for a root CA rotation?"
+    options:
+      - id: a
+        text: "Make it default, then distribute it."
+        explanation: "Not correct. Clients see an untrusted root."
+      - id: b
+        text: "Delete the old root first."
+        explanation: "Not correct. Valid certificates depend on it."
+      - id: c
+        text: "Create the new root, distribute it to trust stores, make it the default, then retire the old issuer."
+        explanation: "Correct. Clients must trust the new root first."
+      - id: d
+        text: "Distribute nothing."
+        explanation: "Not correct. Trust stores need it."
+    correct_option: c
+    explanation: "Correct. Clients must trust the new root first."
+
+  - id: ats114-final-q16
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Schedule tidy"
+    source_readings:
+      - sections/section-020/module-03/course-04-tidy-and-auto-tidy.md
+    prompt: "Which path runs tidy on a schedule?"
+    options:
+      - id: a
+        text: "`pki/tidy` with `repeat=true`."
+        explanation: "Not correct. It is a one-time run."
+      - id: b
+        text: "`pki/config/auto-tidy`"
+        explanation: "Correct. `pki/tidy` runs once."
+      - id: c
+        text: "`pki/config/crl`"
+        explanation: "Not correct. This configures the CRL."
+      - id: d
+        text: "`sys/tidy`"
+        explanation: "Not correct. This path does not exist."
+    correct_option: b
+    explanation: "Correct. `pki/tidy` runs once."
+
+  - id: ats114-final-q17
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Revoke by prefix"
+    source_readings:
+      - sections/section-030/module-02/course-03-listing-and-revoking-leases.md
+    prompt: "How do you end all credentials of one role at once?"
+    options:
+      - id: a
+        text: "`bao lease revoke -prefix database/creds/<role>`"
+        explanation: "Correct. Prefix revocation ends every lease below the path."
+      - id: b
+        text: "Delete the policy."
+        explanation: "Not correct. Existing credentials keep working."
+      - id: c
+        text: "Wait for the TTL."
+        explanation: "Not correct. This does not end them now."
+      - id: d
+        text: "Restart OpenBao."
+        explanation: "Not correct. Leases persist."
+    correct_option: a
+    explanation: "Correct. Prefix revocation ends every lease below the path."
+
+  - id: ats114-final-q18
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Write revocation SQL"
+    source_readings:
+      - sections/section-030/module-03/course-03-creation-and-revocation-statements.md
+    prompt: "What must revocation statements do before dropping a PostgreSQL role?"
+    options:
+      - id: a
+        text: "Nothing; DROP ROLE works alone."
+        explanation: "Not correct. It fails while grants remain."
+      - id: b
+        text: "Restart the database."
+        explanation: "Not correct. This is not needed."
+      - id: c
+        text: "Rename the role."
+        explanation: "Not correct. This does not help."
+      - id: d
+        text: "Take back its grants."
+        explanation: "Correct. PostgreSQL refuses to drop a role that still holds privileges."
+    correct_option: d
+    explanation: "Correct. PostgreSQL refuses to drop a role that still holds privileges."
+
+  - id: ats114-final-q19
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Read a verification"
+    source_readings:
+      - sections/section-040/module-02/course-02-verifying-versions-and-signature-options.md
+    prompt: "A Transit verify request is sent with a wrong signature. What is returned?"
+    options:
+      - id: a
+        text: "An error status."
+        explanation: "Not correct. The request succeeds."
+      - id: b
+        text: "An empty body."
+        explanation: "Not correct. `valid` is returned."
+      - id: c
+        text: "A successful response with `valid` set to `false`."
+        explanation: "Correct. The caller must read the field."
+      - id: d
+        text: "A new signature."
+        explanation: "Not correct. Verify never signs."
+    correct_option: c
+    explanation: "Correct. The caller must read the field."
+
+  - id: ats114-final-q20
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Limit TOTP access"
+    source_readings:
+      - sections/section-050/module-01/course-04-access-control-and-operations.md
+    prompt: "Which capability lets a service validate TOTP codes without generating them?"
+    options:
+      - id: a
+        text: "`read`"
+        explanation: "Not correct. A read generates the code."
+      - id: b
+        text: "`update` on `totp/code/<name>`"
+        explanation: "Correct. A read generates codes."
+      - id: c
+        text: "`sudo`"
+        explanation: "Not correct. Too broad."
+      - id: d
+        text: "`list`"
+        explanation: "Not correct. List shows names only."
+    correct_option: b
+    explanation: "Correct. A read generates codes."
+
+  - id: ats114-final-q21
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Restrict an SSH role"
+    source_readings:
+      - sections/section-050/module-02/course-03-restricting-a-role.md
+    prompt: "Which value of `allowed_users` is a mistake in a production SSH role?"
+    options:
+      - id: a
+        text: "`*`"
+        explanation: "Correct. It lets signed certificates name any account."
+      - id: b
+        text: "`deploy`"
+        explanation: "Not correct. An exact principal is safe."
+      - id: c
+        text: "`deploy,ops`"
+        explanation: "Not correct. A short exact list is safe."
+      - id: d
+        text: "An empty value with a default user."
+        explanation: "Not correct. This is a valid restriction."
+    correct_option: a
+    explanation: "Correct. It lets signed certificates name any account."

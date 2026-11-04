@@ -21,7 +21,9 @@ training:
     two-tier certificate authority with the PKI engine, short-lived
     PostgreSQL credentials from the database engine with leases, renewal,
     revocation and root rotation, and encryption as a service with the
-    Transit engine, key rotation and rewrap. Each module pairs a layered
+    Transit engine, key rotation and rewrap. Further modules cover mounts and
+    response wrapping, PKI issuers and revocation, leases and database
+    configuration, signing with Transit, and the TOTP and SSH engines. Each module pairs a layered
     reader with an ungraded hands-on playground and a graded practice lab.
     Each section closes with an integration capstone.
     Written for OpenBao v2.7.1.
@@ -103,8 +105,99 @@ modules:
           - name: "kv undelete command"
             url: https://openbao.org/docs/commands/kv/undelete/
       - type: reading
+        title: "Patching, Listing, Custom Metadata And The API Paths"
+        path: sections/section-010/module-01/course-04-patching-listing-and-the-api.md
+      - type: reading
         title: Summary
-        path: sections/section-010/module-01/course-04-summary.md
+        path: sections/section-010/module-01/course-05-summary.md
+
+      - type: reading
+        title: "Manage Secrets Engine Mounts"
+        path: sections/section-010/module-02/course.md
+      - type: reading
+        title: "Mounts, Paths And Engine Types"
+        path: sections/section-010/module-02/course-01-mounts-paths-and-engine-types.md
+      - type: reading
+        title: "Tuning A Mount"
+        path: sections/section-010/module-02/course-02-tuning-a-mount.md
+      - type: reading
+        title: "Moving And Disabling Mounts"
+        path: sections/section-010/module-02/course-03-moving-and-disabling-mounts.md
+      - type: reading
+        title: Question
+        path: sections/section-010/module-02/labs/lab-01/question.md
+      - type: lab
+        title: "Move And Tune Secrets Engine Mounts Lab"
+        path: sections/section-010/module-02/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 20m
+        topic: kv
+        task_kind: build
+        tags: [mount, kv-v2, kv-metadata, policy]
+        learning_goals:
+          - Move a mount to a new path without losing its secrets
+          - Change the default and maximum lease TTL and the description of a mount
+          - Disable a mount that is no longer needed and confirm its path is free
+        resources:
+          - name: "Secrets engines"
+            url: https://openbao.org/docs/secrets/
+          - name: "secrets move command"
+            url: https://openbao.org/docs/commands/secrets/move/
+          - name: "secrets tune command"
+            url: https://openbao.org/docs/commands/secrets/tune/
+      - type: reading
+        title: "KV Version 1 And Upgrading To Version 2"
+        path: sections/section-010/module-02/course-04-kv-version-1-and-upgrading-to-version-2.md
+      - type: reading
+        title: Summary
+        path: sections/section-010/module-02/course-05-summary.md
+      - type: quiz
+        title: "Knowledge Check: Manage Secrets Engine Mounts"
+        path: sections/section-010/module-02/quiz.yaml
+        pass_score: 70
+
+      - type: reading
+        title: "Cubbyhole And Response Wrapping"
+        path: sections/section-010/module-03/course.md
+      - type: reading
+        title: "The Cubbyhole Engine"
+        path: sections/section-010/module-03/course-01-the-cubbyhole-engine.md
+      - type: reading
+        title: "Response Wrapping"
+        path: sections/section-010/module-03/course-02-response-wrapping.md
+      - type: reading
+        title: "Verifying A Wrapping Token"
+        path: sections/section-010/module-03/course-03-verifying-a-wrapping-token.md
+      - type: reading
+        title: Question
+        path: sections/section-010/module-03/labs/lab-01/question.md
+      - type: lab
+        title: "Hand Over A Secret With Response Wrapping Lab"
+        path: sections/section-010/module-03/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 20m
+        topic: kv
+        task_kind: build
+        tags: [response-wrapping, cubbyhole, kv-v2, token]
+        learning_goals:
+          - Request a response with a wrapping token that lives for 10 minutes
+          - Deliver the wrapping token and unwrap the one that was received
+          - Store the unwrapped secret in KV version 2
+        resources:
+          - name: "Response wrapping"
+            url: https://openbao.org/docs/concepts/response-wrapping/
+          - name: "Cubbyhole secrets engine"
+            url: https://openbao.org/docs/secrets/cubbyhole/
+      - type: reading
+        title: "Wrapping Credentials From Other Engines"
+        path: sections/section-010/module-03/course-04-wrapping-credentials-from-other-engines.md
+      - type: reading
+        title: Summary
+        path: sections/section-010/module-03/course-05-summary.md
+      - type: quiz
+        title: "Knowledge Check: Cubbyhole And Response Wrapping"
+        path: sections/section-010/module-03/quiz.yaml
+        pass_score: 70
 
       - type: reading
         title: Question
@@ -183,8 +276,97 @@ modules:
           - name: "PKI secrets engine - considerations"
             url: https://openbao.org/docs/secrets/pki/considerations/
       - type: reading
+        title: "Signing Requests And Inspecting Certificates"
+        path: sections/section-020/module-01/course-04-signing-requests-and-inspecting-certificates.md
+      - type: reading
         title: Summary
-        path: sections/section-020/module-01/course-04-summary.md
+        path: sections/section-020/module-01/course-05-summary.md
+
+      - type: reading
+        title: "Issuers And Root Rotation In The PKI Engine"
+        path: sections/section-020/module-02/course.md
+      - type: reading
+        title: "Issuers And Keys"
+        path: sections/section-020/module-02/course-01-issuers-and-keys.md
+      - type: reading
+        title: "The Default Issuer And Roles"
+        path: sections/section-020/module-02/course-02-the-default-issuer-and-roles.md
+      - type: reading
+        title: "Rotating A Root CA"
+        path: sections/section-020/module-02/course-03-rotating-a-root-ca.md
+      - type: reading
+        title: Question
+        path: sections/section-020/module-02/labs/lab-01/question.md
+      - type: lab
+        title: "Rotate The Root Issuer Of A PKI Mount Lab"
+        path: sections/section-020/module-02/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: pki
+        task_kind: migration
+        tags: [pki, root-ca, issuer, pki-role]
+        learning_goals:
+          - Create a new root issuer inside the same PKI mount
+          - Make the new issuer the default
+          - Stop the old issuer from issuing new certificates
+        resources:
+          - name: "PKI secrets engine"
+            url: https://openbao.org/docs/secrets/pki/
+          - name: "PKI secrets engine - considerations"
+            url: https://openbao.org/docs/secrets/pki/considerations/
+      - type: reading
+        title: "Retiring An Issuer"
+        path: sections/section-020/module-02/course-04-retiring-an-issuer.md
+      - type: reading
+        title: Summary
+        path: sections/section-020/module-02/course-05-summary.md
+      - type: quiz
+        title: "Knowledge Check: Issuers And Root Rotation In The PKI Engine"
+        path: sections/section-020/module-02/quiz.yaml
+        pass_score: 70
+
+      - type: reading
+        title: "Certificate Revocation, OCSP And Tidy In The PKI Engine"
+        path: sections/section-020/module-03/course.md
+      - type: reading
+        title: "Revoking Certificates And Reading The CRL"
+        path: sections/section-020/module-03/course-01-revoking-certificates-and-reading-the-crl.md
+      - type: reading
+        title: "Configuring The CRL"
+        path: sections/section-020/module-03/course-02-configuring-the-crl.md
+      - type: reading
+        title: "OCSP And The URLs In A Certificate"
+        path: sections/section-020/module-03/course-03-ocsp-and-the-urls-in-a-certificate.md
+      - type: reading
+        title: "Tidy And Auto-Tidy"
+        path: sections/section-020/module-03/course-04-tidy-and-auto-tidy.md
+      - type: reading
+        title: Question
+        path: sections/section-020/module-03/labs/lab-01/question.md
+      - type: lab
+        title: "Configure CRL, OCSP And Tidy For A PKI Mount Lab"
+        path: sections/section-020/module-03/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: pki
+        task_kind: troubleshooting
+        tags: [pki, crl, ocsp, tidy, issuing-urls]
+        learning_goals:
+          - Revoke a leaked certificate
+          - Set the CRL expiry, automatic rebuild and the URLs in issued certificates
+          - Enable automatic tidy of expired certificates
+        resources:
+          - name: "PKI secrets engine"
+            url: https://openbao.org/docs/secrets/pki/
+          - name: "PKI secrets engine - considerations"
+            url: https://openbao.org/docs/secrets/pki/considerations/
+      - type: reading
+        title: Summary
+        path: sections/section-020/module-03/course-05-summary.md
+      - type: quiz
+        title: "Knowledge Check: Certificate Revocation, OCSP And Tidy In The PKI Engine"
+        path: sections/section-020/module-03/quiz.yaml
+        pass_score: 70
 
       - type: reading
         title: Question
@@ -259,8 +441,101 @@ modules:
         title: "Rotating The Root Credential And Static Roles"
         path: sections/section-030/module-01/course-03-root-rotation-and-static-roles.md
       - type: reading
+        title: "Troubleshooting Database Credentials"
+        path: sections/section-030/module-01/course-04-troubleshooting-database-credentials.md
+      - type: reading
         title: Summary
-        path: sections/section-030/module-01/course-04-summary.md
+        path: sections/section-030/module-01/course-05-summary.md
+
+      - type: reading
+        title: "Lease Management For Database Credentials"
+        path: sections/section-030/module-02/course.md
+      - type: reading
+        title: "Anatomy Of A Lease"
+        path: sections/section-030/module-02/course-01-anatomy-of-a-lease.md
+      - type: reading
+        title: "Renewing And The TTL Limits"
+        path: sections/section-030/module-02/course-02-renewing-and-the-ttl-limits.md
+      - type: reading
+        title: "Listing And Revoking Leases"
+        path: sections/section-030/module-02/course-03-listing-and-revoking-leases.md
+      - type: reading
+        title: "Leases, Tokens And Application Patterns"
+        path: sections/section-030/module-02/course-04-leases-tokens-and-application-patterns.md
+      - type: reading
+        title: Question
+        path: sections/section-030/module-02/labs/lab-01/question.md
+      - type: lab
+        title: "Revoke And Renew Database Leases Lab"
+        path: sections/section-030/module-02/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: leases
+        task_kind: troubleshooting
+        tags: [lease, lease-revoke, revoke-prefix, ttl, database-role]
+        learning_goals:
+          - Revoke a group of leases with a prefix
+          - Set the default and maximum TTL of a role
+          - Renew one credential to a longer lease
+        resources:
+          - name: "Lease, renew, and revoke"
+            url: https://openbao.org/docs/concepts/lease/
+          - name: "lease revoke command"
+            url: https://openbao.org/docs/commands/lease/revoke/
+          - name: "Database secrets engine"
+            url: https://openbao.org/docs/secrets/databases/
+      - type: reading
+        title: Summary
+        path: sections/section-030/module-02/course-05-summary.md
+      - type: quiz
+        title: "Knowledge Check: Lease Management For Database Credentials"
+        path: sections/section-030/module-02/quiz.yaml
+        pass_score: 70
+
+      - type: reading
+        title: "Configuring The Database Engine: Templates, Policies And Statements"
+        path: sections/section-030/module-03/course.md
+      - type: reading
+        title: "Username Templates"
+        path: sections/section-030/module-03/course-01-username-templates.md
+      - type: reading
+        title: "Password Policies"
+        path: sections/section-030/module-03/course-02-password-policies.md
+      - type: reading
+        title: "Creation And Revocation Statements"
+        path: sections/section-030/module-03/course-03-creation-and-revocation-statements.md
+      - type: reading
+        title: "Connections, Limits And Reset"
+        path: sections/section-030/module-03/course-04-connections-limits-and-reset.md
+      - type: reading
+        title: Question
+        path: sections/section-030/module-03/labs/lab-01/question.md
+      - type: lab
+        title: "Configure A Database Role With A Username Template Lab"
+        path: sections/section-030/module-03/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 30m
+        topic: database
+        task_kind: build
+        tags: [database-engine, password-policy, username-template, database-role, postgresql]
+        learning_goals:
+          - Set a username template and a password policy on the connection
+          - Write a role with creation and revocation statements
+          - Prove that a new user is created and removed cleanly
+        resources:
+          - name: "Database secrets engine"
+            url: https://openbao.org/docs/secrets/databases/
+          - name: "PostgreSQL database secrets engine"
+            url: https://openbao.org/docs/secrets/databases/postgresql/
+          - name: "Password policies"
+            url: https://openbao.org/docs/concepts/password-policies/
+      - type: reading
+        title: Summary
+        path: sections/section-030/module-03/course-05-summary.md
+      - type: quiz
+        title: "Knowledge Check: Configuring The Database Engine: Templates, Policies And Statements"
+        path: sections/section-030/module-03/quiz.yaml
+        pass_score: 70
 
       - type: reading
         title: Question
@@ -329,8 +604,55 @@ modules:
           - name: "Transit secrets engine"
             url: https://openbao.org/docs/secrets/transit/
       - type: reading
+        title: "Key Types And Key Settings"
+        path: sections/section-040/module-01/course-03-key-types-and-settings.md
+      - type: reading
+        title: "Context, Convergent Encryption And Batch Requests"
+        path: sections/section-040/module-01/course-04-context-convergent-encryption-and-batch.md
+      - type: reading
         title: Summary
-        path: sections/section-040/module-01/course-03-summary.md
+        path: sections/section-040/module-01/course-05-summary.md
+
+      - type: reading
+        title: "Signing, Verifying And Hashing With The Transit Engine"
+        path: sections/section-040/module-02/course.md
+      - type: reading
+        title: "Signing Keys And Signatures"
+        path: sections/section-040/module-02/course-01-signing-keys-and-signatures.md
+      - type: reading
+        title: "Verifying, Versions And Signature Options"
+        path: sections/section-040/module-02/course-02-verifying-versions-and-signature-options.md
+      - type: reading
+        title: "HMAC, Hashing And Random Bytes"
+        path: sections/section-040/module-02/course-03-hmac-hashing-and-random-bytes.md
+      - type: reading
+        title: "Access Control, Export And Backup"
+        path: sections/section-040/module-02/course-04-access-control-export-and-backup.md
+      - type: reading
+        title: Question
+        path: sections/section-040/module-02/labs/lab-01/question.md
+      - type: lab
+        title: "Sign And Verify A Release Manifest With Transit Lab"
+        path: sections/section-040/module-02/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: transit
+        task_kind: build
+        tags: [transit, signing, policy, hmac]
+        learning_goals:
+          - Create a signing key and sign a release manifest
+          - Publish the signature so that others can verify it
+          - Write a policy that allows verification and nothing else
+        resources:
+          - name: "Transit secrets engine"
+            url: https://openbao.org/docs/secrets/transit/
+      - type: reading
+        title: Summary
+        path: sections/section-040/module-02/course-05-summary.md
+      - type: quiz
+        title: "Knowledge Check: Signing, Verifying And Hashing With The Transit Engine"
+        path: sections/section-040/module-02/quiz.yaml
+        pass_score: 70
 
       - type: reading
         title: Question
@@ -357,6 +679,128 @@ modules:
       - type: quiz
         title: "Knowledge Check: Encryption As A Service With Transit"
         path: sections/section-040/quiz.yaml
+        pass_score: 70
+
+  - id: module-050
+    title: "TOTP And SSH Engines"
+    description: >
+      Access for people and servers: time-based one-time codes with the TOTP
+      engine, short-lived SSH certificates and one-time passwords with the
+      SSH engine, the roles and policies that limit them, and an audit that
+      tightens an over-open SSH role and replaces a leaked TOTP key.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-050/README.md
+
+      - type: reading
+        title: "Time-Based One-Time Passwords With The TOTP Engine"
+        path: sections/section-050/module-01/course.md
+      - type: reading
+        title: "How TOTP Works"
+        path: sections/section-050/module-01/course-01-how-totp-works.md
+      - type: reading
+        title: "Generating And Validating Codes"
+        path: sections/section-050/module-01/course-02-generating-and-validating-codes.md
+      - type: reading
+        title: "Provider And Consumer Modes"
+        path: sections/section-050/module-01/course-03-provider-and-consumer-modes.md
+      - type: reading
+        title: "Access Control And Operations"
+        path: sections/section-050/module-01/course-04-access-control-and-operations.md
+      - type: reading
+        title: Question
+        path: sections/section-050/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Set Up Time-Based One-Time Passwords Lab"
+        path: sections/section-050/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: totp
+        task_kind: build
+        tags: [totp, policy, token]
+        learning_goals:
+          - Create TOTP keys for approvals and for a VPN partner
+          - Validate a code against a key
+          - Write a policy that lets a service validate codes and not generate them
+        resources:
+          - name: "TOTP secrets engine"
+            url: https://openbao.org/docs/secrets/totp/
+      - type: reading
+        title: Summary
+        path: sections/section-050/module-01/course-05-summary.md
+      - type: quiz
+        title: "Knowledge Check: Time-Based One-Time Passwords With The TOTP Engine"
+        path: sections/section-050/module-01/quiz.yaml
+        pass_score: 70
+
+      - type: reading
+        title: "SSH Certificates And One-Time Passwords With The SSH Engine"
+        path: sections/section-050/module-02/course.md
+      - type: reading
+        title: "Two Ways To Authenticate"
+        path: sections/section-050/module-02/course-01-two-ways-to-authenticate.md
+      - type: reading
+        title: "Signing User Keys With A CA Role"
+        path: sections/section-050/module-02/course-02-signing-user-keys-with-a-ca-role.md
+      - type: reading
+        title: "Restricting A Role"
+        path: sections/section-050/module-02/course-03-restricting-a-role.md
+      - type: reading
+        title: "One-Time Passwords"
+        path: sections/section-050/module-02/course-04-one-time-passwords.md
+      - type: reading
+        title: Question
+        path: sections/section-050/module-02/labs/lab-01/question.md
+      - type: lab
+        title: "Configure An SSH Certificate Authority Role Lab"
+        path: sections/section-050/module-02/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 20m
+        topic: ssh
+        task_kind: build
+        tags: [ssh-ca, signing, policy]
+        learning_goals:
+          - Enable the SSH engine and generate the CA key
+          - Create a role with exact principals and short lifetimes
+          - Sign a user public key and confirm that a root login is refused
+        resources:
+          - name: "SSH secrets engine"
+            url: https://openbao.org/docs/secrets/ssh/
+          - name: "Signed SSH certificates"
+            url: https://openbao.org/docs/secrets/ssh/signed-ssh-certificates/
+      - type: reading
+        title: Summary
+        path: sections/section-050/module-02/course-05-summary.md
+      - type: quiz
+        title: "Knowledge Check: SSH Certificates And One-Time Passwords With The SSH Engine"
+        path: sections/section-050/module-02/quiz.yaml
+        pass_score: 70
+
+      - type: reading
+        title: Question
+        path: sections/section-050/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Lock Down SSH And TOTP After An Audit Capstone"
+        path: sections/section-050/capstone/labs/lab-01
+        difficulty: advanced
+        estimated_duration: 40m
+        topic: ssh
+        task_kind: troubleshooting
+        tags: [ssh-ca, totp, policy, signing]
+        learning_goals:
+          - Tighten an SSH role that allows every principal and long lifetimes
+          - Replace a leaked TOTP key and prove the old codes no longer work
+          - Keep the services that depend on both engines working
+        resources:
+          - name: "SSH secrets engine"
+            url: https://openbao.org/docs/secrets/ssh/
+          - name: "TOTP secrets engine"
+            url: https://openbao.org/docs/secrets/totp/
+      - type: quiz
+        title: "Knowledge Check: TOTP And SSH Engines"
+        path: sections/section-050/quiz.yaml
         pass_score: 70
       - type: quiz
         title: "Final Domain Quiz"

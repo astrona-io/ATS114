@@ -1,0 +1,245 @@
+# Knowledge check for section 050 module 01. Listed in astrona.yaml as a `type: quiz` entry after the module summary.
+schema_version: 1
+kind: question_bank
+id: ats114-050-01
+course_id: ATS114
+exam_code: OPENBAO
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: module
+  id: section-050-module-01
+  title: "Time-Based One-Time Passwords With The TOTP Engine"
+placement:
+  position: after
+  reading: sections/section-050/module-01/course-05-summary.md
+questions:
+  - id: ats114-050-01-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Know the inputs"
+    source_readings:
+      - sections/section-050/module-01/course-01-how-totp-works.md
+    prompt: "What is a TOTP code computed from?"
+    options:
+      - id: a
+        text: "A shared secret and the current time."
+        explanation: "Correct. The time gives a counter, and an HMAC of it is cut to digits."
+      - id: b
+        text: "A random number stored at login."
+        explanation: "Not correct. It is derived from secret and time."
+      - id: c
+        text: "The user's password only."
+        explanation: "Not correct. It uses a shared secret."
+      - id: d
+        text: "A public key."
+        explanation: "Not correct. TOTP is symmetric."
+    correct_option: a
+    explanation: "Correct. The time gives a counter, and an HMAC of it is cut to digits."
+
+  - id: ats114-050-01-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Know the defaults"
+    source_readings:
+      - sections/section-050/module-01/course-01-how-totp-works.md
+    prompt: "Which defaults do authenticator apps expect?"
+    options:
+      - id: a
+        text: "`SHA512`, 8 digits and 5 seconds."
+        explanation: "Not correct. These are not the defaults."
+      - id: b
+        text: "`MD5`, 4 digits and 60 seconds."
+        explanation: "Not correct. These are not the defaults."
+      - id: c
+        text: "Any; apps adapt."
+        explanation: "Not correct. Apps expect the defaults."
+      - id: d
+        text: "`SHA1`, 6 digits and a 30 second period."
+        explanation: "Correct. Other values may not work."
+    correct_option: d
+    explanation: "Correct. Other values may not work."
+
+  - id: ats114-050-01-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Settings are fixed"
+    source_readings:
+      - sections/section-050/module-01/course-01-how-totp-works.md
+    prompt: "Can the period of a key be changed after creation?"
+    options:
+      - id: a
+        text: "Yes, with a tune."
+        explanation: "Not correct. They cannot be changed."
+      - id: b
+        text: "Yes, with `update`."
+        explanation: "Not correct. They cannot be changed."
+      - id: c
+        text: "No; settings are fixed at creation."
+        explanation: "Correct. Create a new key instead."
+      - id: d
+        text: "Only for imported keys."
+        explanation: "Not correct. They cannot be changed."
+    correct_option: c
+    explanation: "Correct. Create a new key instead."
+
+  - id: ats114-050-01-q04
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Generate a key"
+    source_readings:
+      - sections/section-050/module-01/course-02-generating-and-validating-codes.md
+    prompt: "Which parameter makes the engine create the secret?"
+    options:
+      - id: a
+        text: "`create=true`"
+        explanation: "Not correct. Not a parameter."
+      - id: b
+        text: "`generate=true`"
+        explanation: "Correct. The engine then returns a URL and QR code once."
+      - id: c
+        text: "`random=true`"
+        explanation: "Not correct. Not a parameter."
+      - id: d
+        text: "`secret=auto`"
+        explanation: "Not correct. Not a parameter."
+    correct_option: b
+    explanation: "Correct. The engine then returns a URL and QR code once."
+
+  - id: ats114-050-01-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Show the secret once"
+    source_readings:
+      - sections/section-050/module-01/course-02-generating-and-validating-codes.md
+    prompt: "What should you do with the returned `otpauth://` URL and QR code?"
+    options:
+      - id: a
+        text: "Show them once and do not keep them."
+        explanation: "Correct. They contain the secret."
+      - id: b
+        text: "Store them in KV."
+        explanation: "Not correct. This keeps the secret."
+      - id: c
+        text: "Email them to the team."
+        explanation: "Not correct. This leaks the secret."
+      - id: d
+        text: "Log them."
+        explanation: "Not correct. This leaks the secret."
+    correct_option: a
+    explanation: "Correct. They contain the secret."
+
+  - id: ats114-050-01-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Validate a code"
+    source_readings:
+      - sections/section-050/module-01/course-02-generating-and-validating-codes.md
+    prompt: "A validation request returns `valid: false`. What is the HTTP result?"
+    options:
+      - id: a
+        text: "An error status."
+        explanation: "Not correct. The request succeeds."
+      - id: b
+        text: "No response."
+        explanation: "Not correct. The field is returned."
+      - id: c
+        text: "A server fault."
+        explanation: "Not correct. It is normal."
+      - id: d
+        text: "A normal success response; read the field."
+        explanation: "Correct. Wrong codes are normal."
+    correct_option: d
+    explanation: "Correct. Wrong codes are normal."
+
+  - id: ats114-050-01-q07
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Replay"
+    source_readings:
+      - sections/section-050/module-01/course-02-generating-and-validating-codes.md
+    prompt: "The same valid code is sent twice in one period. What happens the second time?"
+    options:
+      - id: a
+        text: "It is accepted again."
+        explanation: "Not correct. It is refused."
+      - id: b
+        text: "The key is deleted."
+        explanation: "Not correct. The key stays."
+      - id: c
+        text: "It is refused."
+        explanation: "Correct. An accepted code is not accepted again in the same period."
+      - id: d
+        text: "The period restarts."
+        explanation: "Not correct. The period is fixed."
+    correct_option: c
+    explanation: "Correct. An accepted code is not accepted again in the same period."
+
+  - id: ats114-050-01-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Import a key"
+    source_readings:
+      - sections/section-050/module-01/course-03-provider-and-consumer-modes.md
+    prompt: "How do you use a secret from another system?"
+    options:
+      - id: a
+        text: "Use `generate=true`."
+        explanation: "Not correct. That creates a new one."
+      - id: b
+        text: "Import with `url` or `key`."
+        explanation: "Correct. Import avoids a new secret."
+      - id: c
+        text: "Copy the QR code."
+        explanation: "Not correct. Use the parameters."
+      - id: d
+        text: "It cannot be done."
+        explanation: "Not correct. It can be done."
+    correct_option: b
+    explanation: "Correct. Import avoids a new secret."
+
+  - id: ats114-050-01-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Give least privilege"
+    source_readings:
+      - sections/section-050/module-01/course-04-access-control-and-operations.md
+    prompt: "Which capability lets a service validate codes only?"
+    options:
+      - id: a
+        text: "`update` on `totp/code/<name>`"
+        explanation: "Correct. Reading generates codes, so it stays separate."
+      - id: b
+        text: "`read` on `totp/code/<name>`"
+        explanation: "Not correct. Reading generates codes."
+      - id: c
+        text: "`delete` on `totp/keys/<name>`"
+        explanation: "Not correct. This removes keys."
+      - id: d
+        text: "`sudo`"
+        explanation: "Not correct. Too broad."
+    correct_option: a
+    explanation: "Correct. Reading generates codes, so it stays separate."
+
+  - id: ats114-050-01-q10
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Know the cost of deletion"
+    source_readings:
+      - sections/section-050/module-01/course-04-access-control-and-operations.md
+    prompt: "What happens to phones when a key is deleted?"
+    options:
+      - id: a
+        text: "Nothing."
+        explanation: "Not correct. Validation fails."
+      - id: b
+        text: "They get a new key."
+        explanation: "Not correct. No new key is made."
+      - id: c
+        text: "Codes work for 24 hours."
+        explanation: "Not correct. They stop working."
+      - id: d
+        text: "Their codes stop being valid."
+        explanation: "Correct. The shared secret is gone."
+    correct_option: d
+    explanation: "Correct. The shared secret is gone."

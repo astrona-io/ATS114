@@ -1,0 +1,245 @@
+# Knowledge check for section 050. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats114-050
+course_id: ATS114
+exam_code: OPENBAO
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-050
+  title: "TOTP And SSH Engines"
+placement:
+  position: after
+  reading: sections/section-050/capstone/labs/lab-01/question.md
+questions:
+  - id: ats114-050-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name the TOTP inputs"
+    source_readings:
+      - sections/section-050/module-01/course-01-how-totp-works.md
+    prompt: "What two things is a TOTP code computed from?"
+    options:
+      - id: a
+        text: "A shared secret and the current time."
+        explanation: "Correct. The time is divided by the period to give a counter."
+      - id: b
+        text: "A password and a salt."
+        explanation: "Not correct. These are not the inputs."
+      - id: c
+        text: "A public key and a nonce."
+        explanation: "Not correct. TOTP uses a shared secret."
+      - id: d
+        text: "A token and a lease ID."
+        explanation: "Not correct. These are not the inputs."
+    correct_option: a
+    explanation: "Correct. The time is divided by the period to give a counter."
+
+  - id: ats114-050-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Create a key that the engine generates"
+    source_readings:
+      - sections/section-050/module-01/course-02-generating-and-validating-codes.md
+    prompt: "Which parameter makes the TOTP engine create the secret?"
+    options:
+      - id: a
+        text: "`random=true`"
+        explanation: "Not correct. This parameter does not exist."
+      - id: b
+        text: "`secret=auto`"
+        explanation: "Not correct. This parameter does not exist."
+      - id: c
+        text: "`create=true`"
+        explanation: "Not correct. This parameter does not exist."
+      - id: d
+        text: "`generate=true`"
+        explanation: "Correct. The response then holds an `otpauth://` URL and a QR code once."
+    correct_option: d
+    explanation: "Correct. The response then holds an `otpauth://` URL and a QR code once."
+
+  - id: ats114-050-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Read a validation answer"
+    source_readings:
+      - sections/section-050/module-01/course-02-generating-and-validating-codes.md
+    prompt: "A validation request returns `valid: false`. How do you treat the HTTP result?"
+    options:
+      - id: a
+        text: "As an error status that the client can detect."
+        explanation: "Not correct. The request succeeds."
+      - id: b
+        text: "As proof that the key is deleted."
+        explanation: "Not correct. The key is unchanged."
+      - id: c
+        text: "As a normal success; the caller must read the `valid` field."
+        explanation: "Correct. A wrong code is an expected answer."
+      - id: d
+        text: "As a sign that OpenBao is sealed."
+        explanation: "Not correct. A sealed server gives an error status."
+    correct_option: c
+    explanation: "Correct. A wrong code is an expected answer."
+
+  - id: ats114-050-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Give a service least privilege"
+    source_readings:
+      - sections/section-050/module-01/course-04-access-control-and-operations.md
+    prompt: "Which capability on `totp/code/<name>` lets a service validate codes but not generate them?"
+    options:
+      - id: a
+        text: "`read`"
+        explanation: "Not correct. A read generates the current code."
+      - id: b
+        text: "`update`"
+        explanation: "Correct. Validation is a write and generation is a read."
+      - id: c
+        text: "`list`"
+        explanation: "Not correct. List shows names only."
+      - id: d
+        text: "`delete`"
+        explanation: "Not correct. This does not validate codes."
+    correct_option: b
+    explanation: "Correct. Validation is a write and generation is a read."
+
+  - id: ats114-050-q05
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name the SSH modes"
+    source_readings:
+      - sections/section-050/module-02/course-01-two-ways-to-authenticate.md
+    prompt: "Which two modes does the SSH engine offer?"
+    options:
+      - id: a
+        text: "Signed certificates and one-time passwords."
+        explanation: "Correct. A role uses one of them."
+      - id: b
+        text: "Static keys and dynamic keys."
+        explanation: "Not correct. These are not the modes."
+      - id: c
+        text: "Tokens and leases."
+        explanation: "Not correct. These are not the modes."
+      - id: d
+        text: "Encryption and signing."
+        explanation: "Not correct. These belong to Transit."
+    correct_option: a
+    explanation: "Correct. A role uses one of them."
+
+  - id: ats114-050-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Keep the CA key safe"
+    source_readings:
+      - sections/section-050/module-02/course-02-signing-user-keys-with-a-ca-role.md
+    prompt: "Where should the SSH CA key be generated?"
+    options:
+      - id: a
+        text: "On an administrator laptop."
+        explanation: "Not correct. The key could leak."
+      - id: b
+        text: "On each server."
+        explanation: "Not correct. One CA key is needed."
+      - id: c
+        text: "In a KV secret."
+        explanation: "Not correct. This stores the key where it can be read."
+      - id: d
+        text: "Inside OpenBao, so the private key never leaves it."
+        explanation: "Correct. Servers only need the public key."
+    correct_option: d
+    explanation: "Correct. Servers only need the public key."
+
+  - id: ats114-050-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Trust the CA on a server"
+    source_readings:
+      - sections/section-050/module-02/course-02-signing-user-keys-with-a-ca-role.md
+    prompt: "How does an SSH server accept certificates from the CA?"
+    options:
+      - id: a
+        text: "Each user key is added to `authorized_keys`."
+        explanation: "Not correct. This is the old model."
+      - id: b
+        text: "OpenBao opens a connection to the server."
+        explanation: "Not correct. The server does not need OpenBao for certificates."
+      - id: c
+        text: "`TrustedUserCAKeys` names the CA public key."
+        explanation: "Correct. This is set once for all users."
+      - id: d
+        text: "The server reads `ssh/verify` for each login."
+        explanation: "Not correct. That is OTP mode."
+    correct_option: c
+    explanation: "Correct. This is set once for all users."
+
+  - id: ats114-050-q08
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Limit a role"
+    source_readings:
+      - sections/section-050/module-02/course-03-restricting-a-role.md
+    prompt: "Which role settings are the common mistakes in certificate mode?"
+    options:
+      - id: a
+        text: "A short `max_ttl`."
+        explanation: "Not correct. A short life is the safe choice."
+      - id: b
+        text: "`allowed_users=*` and wide TTLs."
+        explanation: "Correct. A certificate cannot easily be revoked."
+      - id: c
+        text: "Naming exact principals."
+        explanation: "Not correct. This is the safe choice."
+      - id: d
+        text: "Using `permit-pty` at all."
+        explanation: "Not correct. This extension is a normal choice."
+    correct_option: b
+    explanation: "Correct. A certificate cannot easily be revoked."
+
+  - id: ats114-050-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know OTP behavior"
+    source_readings:
+      - sections/section-050/module-02/course-04-one-time-passwords.md
+    prompt: "What happens to a one-time password after its first use?"
+    options:
+      - id: a
+        text: "OpenBao deletes it."
+        explanation: "Correct. A second use fails."
+      - id: b
+        text: "It stays valid for the TTL."
+        explanation: "Not correct. It is deleted at the first use."
+      - id: c
+        text: "It is converted into a certificate."
+        explanation: "Not correct. It is deleted."
+      - id: d
+        text: "It is renewed for another login."
+        explanation: "Not correct. It is deleted."
+    correct_option: a
+    explanation: "Correct. A second use fails."
+
+  - id: ats114-050-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know what OTP needs"
+    source_readings:
+      - sections/section-050/module-02/course-04-one-time-passwords.md
+    prompt: "What does OTP mode need that certificate mode does not?"
+    options:
+      - id: a
+        text: "A CA key."
+        explanation: "Not correct. Certificate mode needs the CA key."
+      - id: b
+        text: "A KV mount."
+        explanation: "Not correct. No KV mount is needed."
+      - id: c
+        text: "Nothing extra."
+        explanation: "Not correct. OTP needs a helper."
+      - id: d
+        text: "A helper on each server and a call to OpenBao at each login."
+        explanation: "Correct. The helper verifies the password at `ssh/verify`."
+    correct_option: d
+    explanation: "Correct. The helper verifies the password at `ssh/verify`."

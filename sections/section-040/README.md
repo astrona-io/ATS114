@@ -17,13 +17,23 @@ This section uses one Transit key from creation to retirement: encrypt and decry
 
 ## The learning path
 
-The module starts at its landing page, which also launches the playground. The playground holds OpenBao, initialized and unsealed, with no Transit mount yet.
+The modules start at their landing pages, which also launch their playgrounds. Each playground holds OpenBao, initialized and unsealed, with the engine of that module not set up yet.
 
 ### 1. Encrypt Data With The Transit Engine
 
 1. Encryption As A Service
 2. Key Rotation, Rewrap And Retiring Old Versions, followed by the lab **Rewrap Records And Retire Old Key Versions**
-3. Summary
+3. Key Types And Key Settings
+4. Context, Convergent Encryption And Batch Requests
+5. Summary
+
+### 2. Signing, Verifying And Hashing With The Transit Engine
+
+1. Signing Keys And Signatures
+2. Verifying, Versions And Signature Options
+3. HMAC, Hashing And Random Bytes
+4. Access Control, Export And Backup, followed by the lab **Sign And Verify A Release Manifest With Transit**
+5. Summary
 
 ## Section capstone: Rotate Everything After A Leak
 

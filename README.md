@@ -25,15 +25,17 @@ section contains:
 
 | Section | Title | Modules | Labs | Topic |
 | --- | --- | --- | --- | --- |
-| [010](sections/section-010) | Static Secrets With KV Version 2 | 1 | 1 + capstone | KV v2 |
-| [020](sections/section-020) | Certificates With The PKI Engine | 1 | 1 + capstone | PKI |
-| [030](sections/section-030) | Dynamic Database Credentials | 1 | 1 + capstone | Database engine and leases |
-| [040](sections/section-040) | Encryption As A Service With Transit | 1 | 1 + capstone | Transit |
+| [010](sections/section-010) | Static Secrets With KV Version 2 | 3 | 3 + capstone | KV v2, mounts, cubbyhole and response wrapping |
+| [020](sections/section-020) | Certificates With The PKI Engine | 3 | 3 + capstone | PKI, issuers, revocation, OCSP and tidy |
+| [030](sections/section-030) | Dynamic Database Credentials | 3 | 3 + capstone | Database engine, leases and configuration |
+| [040](sections/section-040) | Encryption As A Service With Transit | 2 | 2 + capstone | Transit encryption, signing and hashing |
+| [050](sections/section-050) | TOTP And SSH Engines | 2 | 2 + capstone | TOTP and SSH |
 
 The order goes from the simplest engine to the ones that create and protect
 data. KV version 2 only stores what you write. PKI creates certificates on
 request. The database engine creates users that expire, which is where leases
-matter most. Transit stores nothing at all and only encrypts.
+matter most. Transit stores nothing and only encrypts, signs and hashes. TOTP
+and SSH grant access to people and servers.
 
 ---
 
@@ -41,10 +43,19 @@ matter most. Transit stores nothing at all and only encrypts.
 
 | Module | Reader | Parts | Labs |
 | --- | --- | --- | --- |
-| 010-01 | [Store And Version Secrets With KV Version 2](sections/section-010/module-01/course.md) | 3 | [lab-01](sections/section-010/module-01/labs/lab-01) |
-| 020-01 | [Run An Internal Certificate Authority With The PKI Engine](sections/section-020/module-01/course.md) | 3 | [lab-01](sections/section-020/module-01/labs/lab-01) |
-| 030-01 | [Generate Short-Lived Database Credentials](sections/section-030/module-01/course.md) | 3 | [lab-01](sections/section-030/module-01/labs/lab-01) |
-| 040-01 | [Encrypt Data With The Transit Engine](sections/section-040/module-01/course.md) | 2 | [lab-01](sections/section-040/module-01/labs/lab-01) |
+| 010-01 | [Store And Version Secrets With KV Version 2](sections/section-010/module-01/course.md) | 4 | [lab-01](sections/section-010/module-01/labs/lab-01) |
+| 010-02 | [Manage Secrets Engine Mounts](sections/section-010/module-02/course.md) | 4 | [lab-01](sections/section-010/module-02/labs/lab-01) |
+| 010-03 | [Cubbyhole And Response Wrapping](sections/section-010/module-03/course.md) | 4 | [lab-01](sections/section-010/module-03/labs/lab-01) |
+| 020-01 | [Run An Internal Certificate Authority With The PKI Engine](sections/section-020/module-01/course.md) | 4 | [lab-01](sections/section-020/module-01/labs/lab-01) |
+| 020-02 | [Issuers And Root Rotation In The PKI Engine](sections/section-020/module-02/course.md) | 4 | [lab-01](sections/section-020/module-02/labs/lab-01) |
+| 020-03 | [Certificate Revocation, OCSP And Tidy In The PKI Engine](sections/section-020/module-03/course.md) | 4 | [lab-01](sections/section-020/module-03/labs/lab-01) |
+| 030-01 | [Generate Short-Lived Database Credentials](sections/section-030/module-01/course.md) | 5 | [lab-01](sections/section-030/module-01/labs/lab-01) |
+| 030-02 | [Lease Management For Database Credentials](sections/section-030/module-02/course.md) | 4 | [lab-01](sections/section-030/module-02/labs/lab-01) |
+| 030-03 | [Configuring The Database Engine: Templates, Policies And Statements](sections/section-030/module-03/course.md) | 4 | [lab-01](sections/section-030/module-03/labs/lab-01) |
+| 040-01 | [Encrypt Data With The Transit Engine](sections/section-040/module-01/course.md) | 4 | [lab-01](sections/section-040/module-01/labs/lab-01) |
+| 040-02 | [Signing, Verifying And Hashing With The Transit Engine](sections/section-040/module-02/course.md) | 4 | [lab-01](sections/section-040/module-02/labs/lab-01) |
+| 050-01 | [Time-Based One-Time Passwords With The TOTP Engine](sections/section-050/module-01/course.md) | 4 | [lab-01](sections/section-050/module-01/labs/lab-01) |
+| 050-02 | [SSH Certificates And One-Time Passwords With The SSH Engine](sections/section-050/module-02/course.md) | 4 | [lab-01](sections/section-050/module-02/labs/lab-01) |
 
 ---
 
@@ -56,6 +67,7 @@ matter most. Transit stores nothing at all and only encrypts.
 | [020](sections/section-020/capstone/labs/lab-01) | Repair A Broken Certificate Chain | an intermediate CA never signed, a role with the wrong domain, a role on the root mount, no URLs |
 | [030](sections/section-030/capstone/labs/lab-01) | Clean Up After A Database Credential Leak | month-long leases, four leaked credentials, a connection password nobody rotated |
 | [040](sections/section-040/capstone/labs/lab-01) | Rotate Everything After A Leak | a leaked KV version, records on a key version to retire, leaked database credentials |
+| [050](sections/section-050/capstone/labs/lab-01) | Lock Down SSH And TOTP After An Audit | an SSH role that allows every principal for long lifetimes, a leaked TOTP key |
 
 ---
 

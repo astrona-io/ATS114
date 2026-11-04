@@ -243,3 +243,49 @@ questions:
         explanation: "Not correct. A missing token gives a permission error, not a check-and-set error."
     correct_option: b
     explanation: "Correct. This is the lost update that check-and-set prevents."
+
+  - id: ats114-010-q11
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Patch one field"
+    source_readings:
+      - sections/section-010/module-01/course-04-patching-listing-and-the-api.md
+    prompt: "What does `bao kv patch` do that `bao kv put` does not?"
+    options:
+      - id: a
+        text: "It edits the current version in place without a new version."
+        explanation: "Not correct. A patch writes a new version."
+      - id: b
+        text: "It deletes the fields that are not named."
+        explanation: "Not correct. That is what `put` does."
+      - id: c
+        text: "It changes only the named fields and keeps the others, as a new version."
+        explanation: "Correct. `put` replaces the whole secret."
+      - id: d
+        text: "It works with only the `update` capability."
+        explanation: "Not correct. A patch needs the `patch` capability."
+    correct_option: c
+    explanation: "Correct. `put` replaces the whole secret."
+
+  - id: ats114-010-q12
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Write a policy path"
+    source_readings:
+      - sections/section-010/module-01/course-04-patching-listing-and-the-api.md
+    prompt: "An application must read the secret `inventory/payments` in the mount `secret/`. Which policy path is correct?"
+    options:
+      - id: a
+        text: "`secret/inventory/payments`"
+        explanation: "Not correct. This path matches nothing, and the application gets `permission denied`."
+      - id: b
+        text: "`secret/data/inventory/payments`"
+        explanation: "Correct. The policy names the real API path, which includes `data`."
+      - id: c
+        text: "`secret/metadata/inventory/payments`"
+        explanation: "Not correct. This path gives metadata, not values."
+      - id: d
+        text: "`secret/delete/inventory/payments`"
+        explanation: "Not correct. This path is for deleting versions."
+    correct_option: b
+    explanation: "Correct. The policy names the real API path, which includes `data`."

@@ -1,0 +1,245 @@
+# Knowledge check for section 030 module 02. Listed in astrona.yaml as a `type: quiz` entry after the module summary.
+schema_version: 1
+kind: question_bank
+id: ats114-030-02
+course_id: ATS114
+exam_code: OPENBAO
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: module
+  id: section-030-module-02
+  title: "Lease Management For Dynamic Database Credentials"
+placement:
+  position: after
+  reading: sections/section-030/module-02/course-05-summary.md
+questions:
+  - id: ats114-030-02-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Read a lease response"
+    source_readings:
+      - sections/section-030/module-02/course-01-anatomy-of-a-lease.md
+    prompt: "Which fields of a credential read tell you how to end or extend it?"
+    options:
+      - id: a
+        text: "`lease_id`, `lease_duration` and `renewable`."
+        explanation: "Correct. The ID names the lease, the duration is its length, and renewable says if it can be extended."
+      - id: b
+        text: "`request_id` and `warnings`."
+        explanation: "Not correct. These do not describe the lease."
+      - id: c
+        text: "`username` and `password`."
+        explanation: "Not correct. These are the credential, not the lease."
+      - id: d
+        text: "`accessor` and `policies`."
+        explanation: "Not correct. These belong to tokens."
+    correct_option: a
+    explanation: "Correct. The ID names the lease, the duration is its length, and renewable says if it can be extended."
+
+  - id: ats114-030-02-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Know static secrets"
+    source_readings:
+      - sections/section-030/module-02/course-01-anatomy-of-a-lease.md
+    prompt: "Does a KV version 2 read return a lease?"
+    options:
+      - id: a
+        text: "Yes, with a lease of 32 days."
+        explanation: "Not correct. KV returns no lease."
+      - id: b
+        text: "Yes, but it cannot be revoked."
+        explanation: "Not correct. KV returns no lease."
+      - id: c
+        text: "Only when the secret is older than a day."
+        explanation: "Not correct. Age does not matter."
+      - id: d
+        text: "No. Static secrets carry no lease."
+        explanation: "Correct. Only dynamic secrets have leases."
+    correct_option: d
+    explanation: "Correct. Only dynamic secrets have leases."
+
+  - id: ats114-030-02-q03
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Inspect a lease"
+    source_readings:
+      - sections/section-030/module-02/course-01-anatomy-of-a-lease.md
+    prompt: "Which command shows the issue time, expiry and remaining TTL of a lease?"
+    options:
+      - id: a
+        text: "`bao lease show`"
+        explanation: "Not correct. This is not a bao command."
+      - id: b
+        text: "`bao read sys/health`"
+        explanation: "Not correct. This reports server health."
+      - id: c
+        text: "`bao lease lookup <lease_id>`"
+        explanation: "Correct. Lookup reports the state of one lease."
+      - id: d
+        text: "`bao token lookup`"
+        explanation: "Not correct. This inspects a token, not a lease."
+    correct_option: c
+    explanation: "Correct. Lookup reports the state of one lease."
+
+  - id: ats114-030-02-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Use the increment"
+    source_readings:
+      - sections/section-030/module-02/course-02-renewing-and-the-ttl-limits.md
+    prompt: "What does `-increment` mean on `bao lease renew`?"
+    options:
+      - id: a
+        text: "The time to add to the current expiry."
+        explanation: "Not correct. It is counted from now."
+      - id: b
+        text: "The lease time wanted, counted from now."
+        explanation: "Correct. It is not added to the old expiry."
+      - id: c
+        text: "The new `max_ttl` of the role."
+        explanation: "Not correct. A renewal never changes `max_ttl`."
+      - id: d
+        text: "The number of renewals allowed."
+        explanation: "Not correct. It is a time."
+    correct_option: b
+    explanation: "Correct. It is not added to the old expiry."
+
+  - id: ats114-030-02-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Find the limit"
+    source_readings:
+      - sections/section-030/module-02/course-02-renewing-and-the-ttl-limits.md
+    prompt: "A credential was created 50 minutes ago under a role with `max_ttl=1h`. You renew with `-increment=30m`. What happens?"
+    options:
+      - id: a
+        text: "OpenBao grants only about 10 minutes, because `max_ttl` counts from creation."
+        explanation: "Correct. The nearest limit wins."
+      - id: b
+        text: "It grants 30 minutes and moves `max_ttl`."
+        explanation: "Not correct. A renewal never moves `max_ttl`."
+      - id: c
+        text: "It refuses the renewal."
+        explanation: "Not correct. It grants up to the limit."
+      - id: d
+        text: "It grants 30 minutes beyond `max_ttl`."
+        explanation: "Not correct. The limit is not exceeded."
+    correct_option: a
+    explanation: "Correct. The nearest limit wins."
+
+  - id: ats114-030-02-q06
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Which limit wins"
+    source_readings:
+      - sections/section-030/module-02/course-02-renewing-and-the-ttl-limits.md
+    prompt: "A role has `max_ttl=24h` and the mount has `max-lease-ttl=1h`. What is the longest a credential can live?"
+    options:
+      - id: a
+        text: "24 hours, because the role is more specific."
+        explanation: "Not correct. The mount limit still applies."
+      - id: b
+        text: "25 hours, the two added."
+        explanation: "Not correct. Limits are not added."
+      - id: c
+        text: "Unlimited."
+        explanation: "Not correct. Limits apply."
+      - id: d
+        text: "One hour, because the shortest limit wins."
+        explanation: "Correct. The mount limit applies as well as the role limit."
+    correct_option: d
+    explanation: "Correct. The mount limit applies as well as the role limit."
+
+  - id: ats114-030-02-q07
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "List leases"
+    source_readings:
+      - sections/section-030/module-02/course-03-listing-and-revoking-leases.md
+    prompt: "Which path lists the leases under a prefix?"
+    options:
+      - id: a
+        text: "`sys/leases/list`"
+        explanation: "Not correct. This path does not exist."
+      - id: b
+        text: "`database/leases`"
+        explanation: "Not correct. The engine does not list leases."
+      - id: c
+        text: "`sys/leases/lookup/<prefix>`"
+        explanation: "Correct. A list on this path shows the lease IDs."
+      - id: d
+        text: "`sys/audit`"
+        explanation: "Not correct. This is for audit devices."
+    correct_option: c
+    explanation: "Correct. A list on this path shows the lease IDs."
+
+  - id: ats114-030-02-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Revoke a group"
+    source_readings:
+      - sections/section-030/module-02/course-03-listing-and-revoking-leases.md
+    prompt: "How do you end all credentials of one role at once?"
+    options:
+      - id: a
+        text: "Revoke each lease by name only."
+        explanation: "Not correct. This works but not at once."
+      - id: b
+        text: "`bao lease revoke -prefix database/creds/<role>`"
+        explanation: "Correct. Prefix revocation ends every lease under the path."
+      - id: c
+        text: "Disable the role's policy."
+        explanation: "Not correct. Existing credentials keep working."
+      - id: d
+        text: "Wait for the TTL."
+        explanation: "Not correct. This does not end them now."
+    correct_option: b
+    explanation: "Correct. Prefix revocation ends every lease under the path."
+
+  - id: ats114-030-02-q09
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Know what force does"
+    source_readings:
+      - sections/section-030/module-02/course-03-listing-and-revoking-leases.md
+    prompt: "What does `-force` do on a lease revoke?"
+    options:
+      - id: a
+        text: "It removes the lease entry even when the database work fails; users may stay in the database."
+        explanation: "Correct. Use it only when normal revocation fails."
+      - id: b
+        text: "It also drops the database users."
+        explanation: "Not correct. It does not guarantee that."
+      - id: c
+        text: "It extends the lease."
+        explanation: "Not correct. It removes entries."
+      - id: d
+        text: "It revokes only the newest lease."
+        explanation: "Not correct. It does not choose by age."
+    correct_option: a
+    explanation: "Correct. Use it only when normal revocation fails."
+
+  - id: ats114-030-02-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Renew at half"
+    source_readings:
+      - sections/section-030/module-02/course-04-leases-tokens-and-application-patterns.md
+    prompt: "When should an application renew its credential?"
+    options:
+      - id: a
+        text: "Only after it expires."
+        explanation: "Not correct. The credential is dead by then."
+      - id: b
+        text: "Every second."
+        explanation: "Not correct. This floods the server."
+      - id: c
+        text: "Never; a long first TTL is enough."
+        explanation: "Not correct. Limits still apply."
+      - id: d
+        text: "At about half of the lease duration, and read a new credential if renewal fails."
+        explanation: "Correct. This leaves time to recover."
+    correct_option: d
+    explanation: "Correct. This leaves time to recover."

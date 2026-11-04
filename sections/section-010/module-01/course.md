@@ -4,7 +4,7 @@ An application team writes a new database password to OpenBao, and the applicati
 
 The KV secrets engine stores key/value pairs at paths. A secrets engine is a component OpenBao enables at a path, called a mount, that stores, creates or encrypts data. **KV version 2 keeps a numbered version of every write**, and it separates the data of a secret from its metadata: the version history and the settings.
 
-This module has three parts. **Secrets Engines And The KV Version 2 Engine** enables the engine and writes, reads and patches a first secret. **Versions, Deletes And Rollback** reads older versions and shows the three ways to remove data: a soft delete, a destroy, and deleting the metadata. **Metadata, Version Limits And Check-And-Set** changes how many versions a secret keeps and protects it from lost updates. A graded lab follows the third part.
+This module has four parts. **Secrets Engines And The KV Version 2 Engine** enables the engine and writes, reads and patches a first secret. **Versions, Deletes And Rollback** reads older versions and shows the three ways to remove data: a soft delete, a destroy, and deleting the metadata. **Metadata, Version Limits And Check-And-Set** changes how many versions a secret keeps and protects it from lost updates. A graded lab follows the third part. **Patching, Listing, Custom Metadata And The API Paths** changes one field, lists secrets, and shows the real `data` and `metadata` paths that policies and the HTTP API use.
 
 ## Learning objectives
 
@@ -17,6 +17,8 @@ After this module you can:
 - Undelete a version and roll back to an older version.
 - Set `max_versions`, `delete_version_after` and `cas_required` on a secret and on a mount.
 - Write with check-and-set and explain the error when the version is wrong.
+- Patch one field, list secrets, and name the API path and capability of each action.
+- Add custom metadata to a secret.
 
 ## Before you start
 

@@ -1,0 +1,245 @@
+# Knowledge check for section 050 module 02. Listed in astrona.yaml as a `type: quiz` entry after the module summary.
+schema_version: 1
+kind: question_bank
+id: ats114-050-02
+course_id: ATS114
+exam_code: OPENBAO
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: module
+  id: section-050-module-02
+  title: "SSH Certificates And One-Time Passwords With The SSH Engine"
+placement:
+  position: after
+  reading: sections/section-050/module-02/course-05-summary.md
+questions:
+  - id: ats114-050-02-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name the modes"
+    source_readings:
+      - sections/section-050/module-02/course-01-two-ways-to-authenticate.md
+    prompt: "Which two ways does the SSH engine offer?"
+    options:
+      - id: a
+        text: "Signed certificates and one-time passwords."
+        explanation: "Correct. Certificates use a CA; OTP uses a helper."
+      - id: b
+        text: "Passwords and tokens."
+        explanation: "Not correct. These are not the modes."
+      - id: c
+        text: "Keys and files."
+        explanation: "Not correct. These are not the modes."
+      - id: d
+        text: "AES and RSA."
+        explanation: "Not correct. These are not the modes."
+    correct_option: a
+    explanation: "Correct. Certificates use a CA; OTP uses a helper."
+
+  - id: ats114-050-02-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Trust the CA once"
+    source_readings:
+      - sections/section-050/module-02/course-01-two-ways-to-authenticate.md
+    prompt: "How does a server trust certificates from OpenBao?"
+    options:
+      - id: a
+        text: "Add each user key to `authorized_keys`."
+        explanation: "Not correct. This is the old way."
+      - id: b
+        text: "Open port 8200."
+        explanation: "Not correct. Not related."
+      - id: c
+        text: "Disable SSH."
+        explanation: "Not correct. Not related."
+      - id: d
+        text: "Set `TrustedUserCAKeys` to the CA public key."
+        explanation: "Correct. The setting is made once."
+    correct_option: d
+    explanation: "Correct. The setting is made once."
+
+  - id: ats114-050-02-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Keep the CA private"
+    source_readings:
+      - sections/section-050/module-02/course-02-signing-user-keys-with-a-ca-role.md
+    prompt: "Where should the CA key be generated?"
+    options:
+      - id: a
+        text: "On a laptop."
+        explanation: "Not correct. The key could leak."
+      - id: b
+        text: "On each server."
+        explanation: "Not correct. One CA key is needed."
+      - id: c
+        text: "Inside OpenBao, so it never leaves."
+        explanation: "Correct. Use generate_signing_key."
+      - id: d
+        text: "In KV."
+        explanation: "Not correct. Not needed."
+    correct_option: c
+    explanation: "Correct. Use generate_signing_key."
+
+  - id: ats114-050-02-q04
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Sign a key"
+    source_readings:
+      - sections/section-050/module-02/course-02-signing-user-keys-with-a-ca-role.md
+    prompt: "Which path signs a user's public key?"
+    options:
+      - id: a
+        text: "`ssh/creds/<role>`"
+        explanation: "Not correct. This is OTP."
+      - id: b
+        text: "`ssh/sign/<role>`"
+        explanation: "Correct. The role sets the limits."
+      - id: c
+        text: "`ssh/verify`"
+        explanation: "Not correct. This verifies OTPs."
+      - id: d
+        text: "`ssh/config/ca`"
+        explanation: "Not correct. This configures the CA."
+    correct_option: b
+    explanation: "Correct. The role sets the limits."
+
+  - id: ats114-050-02-q05
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Inspect a certificate"
+    source_readings:
+      - sections/section-050/module-02/course-02-signing-user-keys-with-a-ca-role.md
+    prompt: "Which command shows the contents of a signed certificate?"
+    options:
+      - id: a
+        text: "`ssh-keygen -L -f <cert>`"
+        explanation: "Correct. It lists principals and validity."
+      - id: b
+        text: "`ssh-add -x`"
+        explanation: "Not correct. Not an inspection command."
+      - id: c
+        text: "`bao ssh show`"
+        explanation: "Not correct. Not a command."
+      - id: d
+        text: "`ssh -v`"
+        explanation: "Not correct. Does not show contents."
+    correct_option: a
+    explanation: "Correct. It lists principals and validity."
+
+  - id: ats114-050-02-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "List principals"
+    source_readings:
+      - sections/section-050/module-02/course-03-restricting-a-role.md
+    prompt: "What should `allowed_users` hold?"
+    options:
+      - id: a
+        text: "`*`"
+        explanation: "Not correct. Too broad."
+      - id: b
+        text: "Empty always."
+        explanation: "Not correct. An exact list is better."
+      - id: c
+        text: "Only root."
+        explanation: "Not correct. List what is needed."
+      - id: d
+        text: "The exact principals allowed; never `*`."
+        explanation: "Correct. `*` lets users sign for any account."
+    correct_option: d
+    explanation: "Correct. `*` lets users sign for any account."
+
+  - id: ats114-050-02-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Limit lifetime"
+    source_readings:
+      - sections/section-050/module-02/course-03-restricting-a-role.md
+    prompt: "Why keep `max_ttl` short?"
+    options:
+      - id: a
+        text: "Servers reject long ones."
+        explanation: "Not correct. It is a role limit."
+      - id: b
+        text: "It speeds up signing."
+        explanation: "Not correct. Not related."
+      - id: c
+        text: "A certificate cannot easily be revoked."
+        explanation: "Correct. A short life limits exposure."
+      - id: d
+        text: "It is required by the CLI."
+        explanation: "Not correct. Not required."
+    correct_option: c
+    explanation: "Correct. A short life limits exposure."
+
+  - id: ats114-050-02-q08
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Get a one-time password"
+    source_readings:
+      - sections/section-050/module-02/course-04-one-time-passwords.md
+    prompt: "Which path returns an OTP for one address?"
+    options:
+      - id: a
+        text: "`ssh/sign/<role>`"
+        explanation: "Not correct. This signs keys."
+      - id: b
+        text: "`ssh/creds/<role>`"
+        explanation: "Correct. The role is in OTP mode."
+      - id: c
+        text: "`ssh/roles`"
+        explanation: "Not correct. This lists roles."
+      - id: d
+        text: "`ssh/lookup`"
+        explanation: "Not correct. This looks up roles."
+    correct_option: b
+    explanation: "Correct. The role is in OTP mode."
+
+  - id: ats114-050-02-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know the cost"
+    source_readings:
+      - sections/section-050/module-02/course-04-one-time-passwords.md
+    prompt: "What does OTP mode need that certificate mode does not?"
+    options:
+      - id: a
+        text: "A helper on each server and a call to OpenBao at each login."
+        explanation: "Correct. The helper verifies at `ssh/verify`."
+      - id: b
+        text: "A CA key."
+        explanation: "Not correct. Certificates use that."
+      - id: c
+        text: "Nothing."
+        explanation: "Not correct. It needs a helper."
+      - id: d
+        text: "A database."
+        explanation: "Not correct. Not needed."
+    correct_option: a
+    explanation: "Correct. The helper verifies at `ssh/verify`."
+
+  - id: ats114-050-02-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Single use"
+    source_readings:
+      - sections/section-050/module-02/course-04-one-time-passwords.md
+    prompt: "What happens to an OTP after its first use?"
+    options:
+      - id: a
+        text: "It stays valid for the TTL."
+        explanation: "Not correct. It is deleted."
+      - id: b
+        text: "It is renewed."
+        explanation: "Not correct. It is deleted."
+      - id: c
+        text: "It becomes a certificate."
+        explanation: "Not correct. It is deleted."
+      - id: d
+        text: "OpenBao deletes it."
+        explanation: "Correct. A second use fails."
+    correct_option: d
+    explanation: "Correct. A second use fails."

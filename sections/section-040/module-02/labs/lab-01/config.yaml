@@ -1,0 +1,57 @@
+# Sign And Verify A Release Manifest With Transit
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-114-lab-040-02"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+bootstrap:
+  init:
+    - name: "install-openbao"
+      description: "Installs Helm 3.22.1, the bao CLI 2.7.1 and OpenBao 2.7.1, initialized and unsealed"
+      type: "file"
+      source: "bootstrap/01-install-openbao.sh"
+    - name: "ats-114-lab-040-02-setup"
+      description: "Creates the starting state the task works from"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "The tester pod (namespace clients)."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+testing:
+  init:
+    - name: "wait-for-openbao"
+      description: "Waits until OpenBao is unsealed and answers from the tester pod"
+      type: "file"
+      source: "testing/wait-for-openbao.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+validation:
+  scripts:
+    - name: "validate-signing-key"
+      description: "Confirms release-signing is an ed25519 key that is not exportable"
+      type: "file"
+      source: "validation/validate-signing-key.sh"
+    - name: "validate-signature-published"
+      description: "Confirms the published signature is valid for the unchanged manifest"
+      type: "file"
+      source: "validation/validate-signature-published.sh"
+    - name: "validate-verifier-policy"
+      description: "Confirms the policy release-verifier can verify but not sign or read the key"
+      type: "file"
+      source: "validation/validate-verifier-policy.sh"
+teardown:
+  keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - nicolaka/netshoot:v0.13
+      - quay.io/openbao/openbao:2.7.1

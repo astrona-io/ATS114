@@ -218,9 +218,10 @@ section is only true for this one.
   should lead to a command the reader can run, and every fix should be proved
   with a secret, certificate or credential that works (or stops working) as
   expected.
-- **The four topics:** static secrets in KV version 2, certificates with the
-  PKI engine, dynamic database credentials and their leases, and encryption
-  as a service with the Transit engine.
+- **The five topics:** static secrets in KV version 2 and mount management,
+  certificates with the PKI engine, dynamic database credentials and their
+  leases, encryption and signing with the Transit engine, and the TOTP and
+  SSH engines.
 - **The sections:**
 
   | Section | Title | Topic |
@@ -229,6 +230,7 @@ section is only true for this one.
   | 020 | Certificates With The PKI Engine | PKI |
   | 030 | Dynamic Database Credentials | Database engine and leases |
   | 040 | Encryption As A Service With Transit | Transit |
+  | 050 | TOTP And SSH Engines | TOTP and SSH |
 
 - **The versions:** **OpenBao v2.7.1** (server image `quay.io/openbao/openbao`
   and the `bao` CLI from the release archive), installed with the `openbao`
@@ -376,7 +378,7 @@ Lifecycle`, weight `25`. Lab entries carry `title`, `path`, `difficulty`,
 `estimated_duration`, `topic`, `task_kind`, `tags`, `learning_goals`,
 `resources`, in that order, as in ATS016.
 
-- `topic`: exactly one of `kv`, `pki`, `database`, `leases`, `transit`.
+- `topic`: exactly one of `kv`, `pki`, `database`, `leases`, `transit`, `totp`, `ssh`.
 - `task_kind`: `build`, `troubleshooting` or `migration`.
 - `tags`: 4 to 8, only from this list: `kv-v2`, `versions`, `soft-delete`,
   `destroy`, `undelete`, `rollback`, `kv-metadata`, `check-and-set`,
@@ -385,7 +387,9 @@ Lifecycle`, weight `25`. Lab entries carry `title`, `path`, `difficulty`,
   `postgresql`, `dynamic-credentials`, `database-role`, `rotate-root`,
   `static-role`, `lease`, `lease-renew`, `lease-revoke`, `revoke-prefix`,
   `ttl`, `transit`, `encrypt`, `decrypt`, `key-rotation`, `rewrap`,
-  `min-decryption-version`.
+  `min-decryption-version`, `mount`, `cubbyhole`, `response-wrapping`,
+  `token`, `issuer`, `ocsp`, `tidy`, `password-policy`, `username-template`,
+  `signing`, `hmac`, `totp`, `ssh-ca`, `policy`.
 - `resources`: 1 to 4 pages on `openbao.org`. The only place outside links
   are allowed.
 

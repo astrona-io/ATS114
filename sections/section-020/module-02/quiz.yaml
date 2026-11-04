@@ -1,0 +1,245 @@
+# Knowledge check for section 020 module 02. Listed in astrona.yaml as a `type: quiz` entry after the module summary.
+schema_version: 1
+kind: question_bank
+id: ats114-020-02
+course_id: ATS114
+exam_code: OPENBAO
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: module
+  id: section-020-module-02
+  title: "Issuers And Root Rotation In The PKI Engine"
+placement:
+  position: after
+  reading: sections/section-020/module-02/course-05-summary.md
+questions:
+  - id: ats114-020-02-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Separate issuers and keys"
+    source_readings:
+      - sections/section-020/module-02/course-01-issuers-and-keys.md
+    prompt: "How does a PKI mount store a CA?"
+    options:
+      - id: a
+        text: "As two objects: an issuer (the CA certificate) and a key (its private key), linked by `key_id`."
+        explanation: "Correct. Issuers and keys are separate objects."
+      - id: b
+        text: "As one object that holds certificate and key together."
+        explanation: "Not correct. They are separate objects."
+      - id: c
+        text: "As a file on the OpenBao host."
+        explanation: "Not correct. They are stored inside OpenBao."
+      - id: d
+        text: "As a role."
+        explanation: "Not correct. Roles limit issuing; they are not CAs."
+    correct_option: a
+    explanation: "Correct. Issuers and keys are separate objects."
+
+  - id: ats114-020-02-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name issuers"
+    source_readings:
+      - sections/section-020/module-02/course-01-issuers-and-keys.md
+    prompt: "Which fields give an issuer and its key readable names at creation?"
+    options:
+      - id: a
+        text: "`ca_name` and `pair_name`."
+        explanation: "Not correct. These fields do not exist."
+      - id: b
+        text: "`common_name` only."
+        explanation: "Not correct. The common name is not a reference."
+      - id: c
+        text: "`label` and `alias`."
+        explanation: "Not correct. These fields do not exist."
+      - id: d
+        text: "`issuer_name` and `key_name`."
+        explanation: "Correct. A reference can then be an ID, a name or `default`."
+    correct_option: d
+    explanation: "Correct. A reference can then be an ID, a name or `default`."
+
+  - id: ats114-020-02-q03
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Know the default issuer"
+    source_readings:
+      - sections/section-020/module-02/course-02-the-default-issuer-and-roles.md
+    prompt: "Which issuer signs a request that names no issuer?"
+    options:
+      - id: a
+        text: "The oldest issuer."
+        explanation: "Not correct. Age does not decide."
+      - id: b
+        text: "The issuer with the longest validity."
+        explanation: "Not correct. Validity does not decide."
+      - id: c
+        text: "The default issuer of the mount."
+        explanation: "Correct. `pki/config/issuers` sets which one is the default."
+      - id: d
+        text: "All issuers, each signing a copy."
+        explanation: "Not correct. Only one issuer signs."
+    correct_option: c
+    explanation: "Correct. `pki/config/issuers` sets which one is the default."
+
+  - id: ats114-020-02-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Pin an issuer"
+    source_readings:
+      - sections/section-020/module-02/course-02-the-default-issuer-and-roles.md
+    prompt: "How do you make a role always use one issuer, whatever the default is?"
+    options:
+      - id: a
+        text: "Set `default=true` on the role."
+        explanation: "Not correct. The role has no such field for this."
+      - id: b
+        text: "Set `issuer_ref` on the role."
+        explanation: "Correct. A role with `issuer_ref` ignores the default."
+      - id: c
+        text: "Give the role the same name as the issuer."
+        explanation: "Not correct. Names do not link them."
+      - id: d
+        text: "Disable all other issuers."
+        explanation: "Not correct. `issuer_ref` is the direct way."
+    correct_option: b
+    explanation: "Correct. A role with `issuer_ref` ignores the default."
+
+  - id: ats114-020-02-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Start a root rotation"
+    source_readings:
+      - sections/section-020/module-02/course-03-rotating-a-root-ca.md
+    prompt: "Which request creates a new root issuer inside the same mount?"
+    options:
+      - id: a
+        text: "`pki/root/rotate/internal`"
+        explanation: "Correct. It makes a new root and key in the mount."
+      - id: b
+        text: "`pki/root/delete`"
+        explanation: "Not correct. This removes the root."
+      - id: c
+        text: "`pki/config/rotate`"
+        explanation: "Not correct. This path does not exist."
+      - id: d
+        text: "`pki/tidy`"
+        explanation: "Not correct. Tidy removes expired entries."
+    correct_option: a
+    explanation: "Correct. It makes a new root and key in the mount."
+
+  - id: ats114-020-02-q06
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Order a rotation"
+    source_readings:
+      - sections/section-020/module-02/course-03-rotating-a-root-ca.md
+    prompt: "Which order is right for a root rotation?"
+    options:
+      - id: a
+        text: "Make it the default first, then distribute it."
+        explanation: "Not correct. Clients would see certificates from an untrusted root."
+      - id: b
+        text: "Delete the old root first."
+        explanation: "Not correct. Valid certificates still depend on it."
+      - id: c
+        text: "Distribute nothing; clients fetch it automatically."
+        explanation: "Not correct. Trust stores need the new root."
+      - id: d
+        text: "Create the new root, put it into every trust store, make it the default, then retire the old one."
+        explanation: "Correct. Clients must trust the new root before it signs anything they see."
+    correct_option: d
+    explanation: "Correct. Clients must trust the new root before it signs anything they see."
+
+  - id: ats114-020-02-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Stop an issuer from signing"
+    source_readings:
+      - sections/section-020/module-02/course-04-retiring-an-issuer.md
+    prompt: "How do you stop an old issuer from issuing but keep its CRL?"
+    options:
+      - id: a
+        text: "Delete the issuer."
+        explanation: "Not correct. Deleting removes the CRL signer too."
+      - id: b
+        text: "Disable the mount."
+        explanation: "Not correct. This deletes everything in the mount."
+      - id: c
+        text: "Remove `issuing-certificates` from its `usage` field."
+        explanation: "Correct. The issuer still signs revocation lists."
+      - id: d
+        text: "Set its TTL to 0."
+        explanation: "Not correct. This does not change what it can sign."
+    correct_option: c
+    explanation: "Correct. The issuer still signs revocation lists."
+
+  - id: ats114-020-02-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Delete in order"
+    source_readings:
+      - sections/section-020/module-02/course-04-retiring-an-issuer.md
+    prompt: "In which order are an issuer and its key deleted?"
+    options:
+      - id: a
+        text: "The key first, then the issuer."
+        explanation: "Not correct. The issuer still needs the key."
+      - id: b
+        text: "The issuer first, then the key."
+        explanation: "Correct. The key cannot be removed while an issuer uses it."
+      - id: c
+        text: "Both at once with one request."
+        explanation: "Not correct. They are separate objects."
+      - id: d
+        text: "The key only; the issuer disappears with it."
+        explanation: "Not correct. The issuer must be deleted."
+    correct_option: b
+    explanation: "Correct. The key cannot be removed while an issuer uses it."
+
+  - id: ats114-020-02-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know when to delete"
+    source_readings:
+      - sections/section-020/module-02/course-04-retiring-an-issuer.md
+    prompt: "When may you delete the old issuer?"
+    options:
+      - id: a
+        text: "When no valid certificate depends on it."
+        explanation: "Correct. Deleting earlier breaks chains and revocation."
+      - id: b
+        text: "As soon as the new root is the default."
+        explanation: "Not correct. Old certificates may still be valid."
+      - id: c
+        text: "Never; issuers cannot be deleted."
+        explanation: "Not correct. They can be deleted."
+      - id: d
+        text: "Right after creating the new root."
+        explanation: "Not correct. Clients still need the old one."
+    correct_option: a
+    explanation: "Correct. Deleting earlier breaks chains and revocation."
+
+  - id: ats114-020-02-q10
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Read the default after a rotation"
+    source_readings:
+      - sections/section-020/module-02/course-03-rotating-a-root-ca.md
+    prompt: "After `rotate/internal`, you do nothing else. Which issuer is the default?"
+    options:
+      - id: a
+        text: "Always the new one, because it is newer."
+        explanation: "Not correct. Do not assume; read the configuration."
+      - id: b
+        text: "None; the mount has no default."
+        explanation: "Not correct. A default is always set."
+      - id: c
+        text: "Both; they alternate."
+        explanation: "Not correct. One issuer is the default."
+      - id: d
+        text: "Check with `pki/config/issuers`; switching the default is a separate step."
+        explanation: "Correct. Creating a root and switching the default are separate actions."
+    correct_option: d
+    explanation: "Correct. Creating a root and switching the default are separate actions."

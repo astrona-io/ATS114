@@ -4,7 +4,7 @@ The inventory application stores order notes in a table, and some notes hold cus
 
 The Transit secrets engine encrypts and decrypts on request. The application sends plaintext and gets ciphertext back, stores the ciphertext itself, and sends it back later to decrypt. **The key never leaves OpenBao, and OpenBao never stores the data**, so a leaked database without OpenBao is only ciphertext.
 
-This module has two parts. **Encryption As A Service** creates a key, encrypts and decrypts records, reads the ciphertext format and uses a data key. **Key Rotation, Rewrap And Retiring Old Versions** rotates the key, moves stored ciphertext to the new version without decrypting it, and stops old versions from decrypting. A graded lab follows the second part.
+This module has four parts. **Encryption As A Service** creates a key, encrypts and decrypts records, reads the ciphertext format and uses a data key. **Key Rotation, Rewrap And Retiring Old Versions** rotates the key, moves stored ciphertext to the new version without decrypting it, and stops old versions from decrypting. A graded lab follows the second part. **Key Types And Key Settings** lists the key types and the settings for rotation, export and deletion. **Context, Convergent Encryption And Batch Requests** derives a separate key for each context, makes ciphertext repeatable for lookups, and processes many items in one call.
 
 ## Learning objectives
 
@@ -16,6 +16,9 @@ After this module you can:
 - Read which key version a ciphertext uses from its `vault:vN:` prefix.
 - Explain when to use a data key.
 - Rotate a key, rewrap ciphertext, and set `min_decryption_version`.
+- Choose a key type for encryption or for signatures.
+- Set `auto_rotate_period` and `deletion_allowed`.
+- Use a context with a derived key, explain convergent encryption, and send a batch request.
 
 ## Before you start
 

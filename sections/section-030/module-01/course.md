@@ -4,7 +4,7 @@ The inventory application reads from a PostgreSQL table. Today it uses one datab
 
 The database secrets engine gives every application instance its own database user, created on request. A dynamic secret is a value OpenBao creates when you ask for it, with a lease: the time it is valid. **When the lease ends or is revoked, OpenBao drops the database user, so a leaked credential stops working on its own.**
 
-This module has three parts. **Dynamic Secrets And The Database Secrets Engine** explains leases and connects OpenBao to PostgreSQL. **Roles, Credentials And Their Leases** writes the SQL that creates read-only users, reads credentials, and renews and revokes their leases. A graded lab follows it. **Rotating The Root Credential And Static Roles** changes OpenBao's own connection password and manages a user that already exists.
+This module has four parts. **Dynamic Secrets And The Database Secrets Engine** explains leases and connects OpenBao to PostgreSQL. **Roles, Credentials And Their Leases** writes the SQL that creates read-only users, reads credentials, and renews and revokes their leases. A graded lab follows it. **Rotating The Root Credential And Static Roles** changes OpenBao's own connection password and manages a user that already exists. **Troubleshooting Database Credentials** breaks a policy, a role, the SQL and the connection on purpose, and shows which command reveals each cause.
 
 ## Learning objectives
 
@@ -17,6 +17,7 @@ After this module you can:
 - Read credentials, use them with `psql`, and look up, renew and revoke their lease.
 - Revoke every lease under a path with `-prefix`.
 - Rotate the root credential and read the credentials of a static role.
+- Find why a credential is not created by checking the policy, the role, `allowed_roles`, the connection and the SQL in turn.
 
 ## Before you start
 

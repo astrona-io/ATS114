@@ -243,3 +243,49 @@ questions:
         explanation: "Not correct. Static roles have no lease."
     correct_option: b
     explanation: "Correct. Read it at `database/static-creds/<role>`."
+
+  - id: ats114-030-q11
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Locate a permission error"
+    source_readings:
+      - sections/section-030/module-01/course-04-troubleshooting-database-credentials.md
+    prompt: "An application reading `database/creds/inventory-readonly` gets `permission denied`. Where is the cause?"
+    options:
+      - id: a
+        text: "In the PostgreSQL pg_hba rules."
+        explanation: "Not correct. The database is not reached."
+      - id: b
+        text: "In the SQL creation statements."
+        explanation: "Not correct. A failing statement gives a different error."
+      - id: c
+        text: "In the token's policy, not in PostgreSQL."
+        explanation: "Correct. The error comes from OpenBao before any database work."
+      - id: d
+        text: "In the lease TTL."
+        explanation: "Not correct. A TTL does not cause this error."
+    correct_option: c
+    explanation: "Correct. The error comes from OpenBao before any database work."
+
+  - id: ats114-030-q12
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Check the allow list"
+    source_readings:
+      - sections/section-030/module-01/course-04-troubleshooting-database-credentials.md
+    prompt: "A role exists, but a read of its credentials fails. Which setting of the connection do you check?"
+    options:
+      - id: a
+        text: "`max_open_connections`"
+        explanation: "Not correct. This limits the pool."
+      - id: b
+        text: "`allowed_roles`"
+        explanation: "Correct. The role must be in the list of the connection it names."
+      - id: c
+        text: "`username_template`"
+        explanation: "Not correct. This shapes names."
+      - id: d
+        text: "`verify_connection`"
+        explanation: "Not correct. This is checked when the connection is written."
+    correct_option: b
+    explanation: "Correct. The role must be in the list of the connection it names."

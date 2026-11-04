@@ -243,3 +243,95 @@ questions:
         explanation: "Not correct. Trim is `transit/keys/<name>/trim`."
     correct_option: b
     explanation: "Correct. Use `transit/keys/<name>/rotate` for a Transit key."
+
+  - id: ats114-040-q11
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Match type to use"
+    source_readings:
+      - sections/section-040/module-01/course-03-key-types-and-settings.md
+    prompt: "Which operation fails on a key of the default type `aes256-gcm96`?"
+    options:
+      - id: a
+        text: "Encryption."
+        explanation: "Not correct. Encryption is the main use."
+      - id: b
+        text: "Decryption."
+        explanation: "Not correct. Decryption is supported."
+      - id: c
+        text: "Signing."
+        explanation: "Correct. The AES key supports encrypt, decrypt and HMAC, not signatures."
+      - id: d
+        text: "Rotation."
+        explanation: "Not correct. Any key can be rotated."
+    correct_option: c
+    explanation: "Correct. The AES key supports encrypt, decrypt and HMAC, not signatures."
+
+  - id: ats114-040-q12
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Delete a key"
+    source_readings:
+      - sections/section-040/module-01/course-03-key-types-and-settings.md
+    prompt: "What must be true before a Transit key can be deleted?"
+    options:
+      - id: a
+        text: "The key was never rotated."
+        explanation: "Not correct. Rotation does not matter."
+      - id: b
+        text: "`deletion_allowed` is set to `true` on the key."
+        explanation: "Correct. The setting is a guard against accidents."
+      - id: c
+        text: "The key is exportable."
+        explanation: "Not correct. Exportable is a different setting."
+      - id: d
+        text: "The mount has no other keys."
+        explanation: "Not correct. Other keys do not matter."
+    correct_option: b
+    explanation: "Correct. The setting is a guard against accidents."
+
+  - id: ats114-040-q13
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Use a context"
+    source_readings:
+      - sections/section-040/module-01/course-04-context-convergent-encryption-and-batch.md
+    prompt: "A key was created with `derived=true`. What must the caller send on encrypt and decrypt?"
+    options:
+      - id: a
+        text: "The same Base64 context both times."
+        explanation: "Correct. A different context derives a different key and decryption fails."
+      - id: b
+        text: "A different context each time."
+        explanation: "Not correct. This makes decryption fail."
+      - id: c
+        text: "Nothing; the context is optional."
+        explanation: "Not correct. A derived key needs a context."
+      - id: d
+        text: "A secret context that is never stored."
+        explanation: "Not correct. The context is not secret, but it must be known again."
+    correct_option: a
+    explanation: "Correct. A different context derives a different key and decryption fails."
+
+  - id: ats114-040-q14
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Know the trade-off"
+    source_readings:
+      - sections/section-040/module-01/course-04-context-convergent-encryption-and-batch.md
+    prompt: "What is the price of `convergent_encryption=true`?"
+    options:
+      - id: a
+        text: "Decryption becomes slower."
+        explanation: "Not correct. Speed is not the trade-off."
+      - id: b
+        text: "The key cannot be rotated."
+        explanation: "Not correct. Rotation still works."
+      - id: c
+        text: "Ciphertexts are no longer authenticated."
+        explanation: "Not correct. Authentication stays."
+      - id: d
+        text: "Equal plaintexts give equal ciphertexts, so someone with the stored data can see which values are equal."
+        explanation: "Correct. This is why it is used only where exact-match lookup is needed."
+    correct_option: d
+    explanation: "Correct. This is why it is used only where exact-match lookup is needed."

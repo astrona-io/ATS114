@@ -1,0 +1,106 @@
+# PostgreSQL 17 for the database secrets engine. Lab-only credentials:
+# postgres / postgres-admin-password (superuser, never given to OpenBao) and
+# openbao_admin / openbao-admin-password (CREATEROLE, the user OpenBao
+# connects as). Data lives in an emptyDir: a restart loses it.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: data
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: postgres-admin
+  namespace: data
+type: Opaque
+stringData:
+  username: postgres
+  password: postgres-admin-password
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-init
+  namespace: data
+data:
+  01-inventory.sql: |
+    CREATE TABLE items (
+      id       serial PRIMARY KEY,
+      name     text NOT NULL,
+      quantity integer NOT NULL
+    );
+    INSERT INTO items (name, quantity) VALUES ('bolt', 120), ('nut', 300), ('washer', 75);
+
+    -- The user OpenBao connects as. It may create roles and pass on its
+    -- table privileges, but it is not a superuser.
+    CREATE ROLE openbao_admin WITH LOGIN PASSWORD 'openbao-admin-password' CREATEROLE;
+    GRANT USAGE ON SCHEMA public TO openbao_admin WITH GRANT OPTION;
+    GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO openbao_admin WITH GRANT OPTION;
+    GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO openbao_admin WITH GRANT OPTION;
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  namespace: data
+  labels:
+    app: postgres
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:17-alpine
+          env:
+            - name: POSTGRES_DB
+              value: inventory
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-admin
+                  key: username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-admin
+                  key: password
+          ports:
+            - name: postgres
+              containerPort: 5432
+          readinessProbe:
+            exec:
+              command: ["pg_isready", "-U", "postgres", "-d", "inventory", "-h", "127.0.0.1"]
+            periodSeconds: 5
+          volumeMounts:
+            - name: init
+              mountPath: /docker-entrypoint-initdb.d
+            - name: data
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: init
+          configMap:
+            name: postgres-init
+        - name: data
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  namespace: data
+spec:
+  selector:
+    app: postgres
+  ports:
+    - name: postgres
+      port: 5432
+      targetPort: postgres

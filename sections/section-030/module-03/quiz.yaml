@@ -1,0 +1,245 @@
+# Knowledge check for section 030 module 03. Listed in astrona.yaml as a `type: quiz` entry after the module summary.
+schema_version: 1
+kind: question_bank
+id: ats114-030-03
+course_id: ATS114
+exam_code: OPENBAO
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: module
+  id: section-030-module-03
+  title: "Configuring The Database Engine"
+placement:
+  position: after
+  reading: sections/section-030/module-03/course-05-summary.md
+questions:
+  - id: ats114-030-03-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Set a username template"
+    source_readings:
+      - sections/section-030/module-03/course-01-username-templates.md
+    prompt: "Where is `username_template` set?"
+    options:
+      - id: a
+        text: "On the connection, so it applies to every role that uses it."
+        explanation: "Correct. It shapes generated names."
+      - id: b
+        text: "On the lease."
+        explanation: "Not correct. Leases do not hold it."
+      - id: c
+        text: "On the mount tune."
+        explanation: "Not correct. It is a connection setting."
+      - id: d
+        text: "On the policy."
+        explanation: "Not correct. Policies do not shape names."
+    correct_option: a
+    explanation: "Correct. It shapes generated names."
+
+  - id: ats114-030-03-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Keep names unique"
+    source_readings:
+      - sections/section-030/module-03/course-01-username-templates.md
+    prompt: "Why must a username template include a random part?"
+    options:
+      - id: a
+        text: "PostgreSQL rejects names without it."
+        explanation: "Not correct. It is for uniqueness."
+      - id: b
+        text: "It encrypts the name."
+        explanation: "Not correct. It is not encryption."
+      - id: c
+        text: "It shortens the lease."
+        explanation: "Not correct. It does not affect leases."
+      - id: d
+        text: "Two credentials from the same role would otherwise get the same name."
+        explanation: "Correct. A random part separates credentials."
+    correct_option: d
+    explanation: "Correct. A random part separates credentials."
+
+  - id: ats114-030-03-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Respect name limits"
+    source_readings:
+      - sections/section-030/module-03/course-01-username-templates.md
+    prompt: "What limits generated names in PostgreSQL?"
+    options:
+      - id: a
+        text: "16 characters."
+        explanation: "Not correct. The limit is 63."
+      - id: b
+        text: "There is no limit."
+        explanation: "Not correct. There is a limit."
+      - id: c
+        text: "A maximum of 63 characters."
+        explanation: "Correct. Use truncation in the template."
+      - id: d
+        text: "255 characters."
+        explanation: "Not correct. The limit is 63."
+    correct_option: c
+    explanation: "Correct. Use truncation in the template."
+
+  - id: ats114-030-03-q04
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Use a password policy"
+    source_readings:
+      - sections/section-030/module-03/course-02-password-policies.md
+    prompt: "What does `password_policy` on a connection name?"
+    options:
+      - id: a
+        text: "A token policy."
+        explanation: "Not correct. Token policies are different."
+      - id: b
+        text: "A policy stored under `sys/policies/password/` that sets the length and character rules."
+        explanation: "Correct. It controls generated passwords."
+      - id: c
+        text: "A role."
+        explanation: "Not correct. Roles hold SQL."
+      - id: d
+        text: "A mount tune."
+        explanation: "Not correct. It is a separate policy type."
+    correct_option: b
+    explanation: "Correct. It controls generated passwords."
+
+  - id: ats114-030-03-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Test a policy"
+    source_readings:
+      - sections/section-030/module-03/course-02-password-policies.md
+    prompt: "How can you test a password policy before using it?"
+    options:
+      - id: a
+        text: "Call its generate endpoint."
+        explanation: "Correct. It returns a sample password."
+      - id: b
+        text: "Create a role and wait."
+        explanation: "Not correct. The generate endpoint is faster."
+      - id: c
+        text: "Restart OpenBao."
+        explanation: "Not correct. Not needed."
+      - id: d
+        text: "Read the audit log."
+        explanation: "Not correct. Audit does not generate."
+    correct_option: a
+    explanation: "Correct. It returns a sample password."
+
+  - id: ats114-030-03-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know which credentials change"
+    source_readings:
+      - sections/section-030/module-03/course-02-password-policies.md
+    prompt: "A username template or password policy changes. Which credentials are affected?"
+    options:
+      - id: a
+        text: "All existing credentials are renamed."
+        explanation: "Not correct. Existing ones are not changed."
+      - id: b
+        text: "Only root credentials."
+        explanation: "Not correct. New credentials only."
+      - id: c
+        text: "None, ever."
+        explanation: "Not correct. New credentials follow it."
+      - id: d
+        text: "Only new credentials."
+        explanation: "Correct. Existing credentials stay as they are."
+    correct_option: d
+    explanation: "Correct. Existing credentials stay as they are."
+
+  - id: ats114-030-03-q07
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Know where SQL lives"
+    source_readings:
+      - sections/section-030/module-03/course-03-creation-and-revocation-statements.md
+    prompt: "Where are the creation statements defined?"
+    options:
+      - id: a
+        text: "On the connection."
+        explanation: "Not correct. The connection holds settings."
+      - id: b
+        text: "On the mount."
+        explanation: "Not correct. The mount holds none."
+      - id: c
+        text: "On the role."
+        explanation: "Correct. The role holds the SQL."
+      - id: d
+        text: "In the policy."
+        explanation: "Not correct. Policies do not hold SQL."
+    correct_option: c
+    explanation: "Correct. The role holds the SQL."
+
+  - id: ats114-030-03-q08
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Order revocation"
+    source_readings:
+      - sections/section-030/module-03/course-03-creation-and-revocation-statements.md
+    prompt: "What must revocation statements do before dropping the user?"
+    options:
+      - id: a
+        text: "Nothing; DROP ROLE works alone."
+        explanation: "Not correct. It fails while grants remain."
+      - id: b
+        text: "Take back the user's grants."
+        explanation: "Correct. PostgreSQL refuses to drop a role that still holds privileges, and the user stays."
+      - id: c
+        text: "Restart the database."
+        explanation: "Not correct. This is not needed."
+      - id: d
+        text: "Rename the role."
+        explanation: "Not correct. This does not help."
+    correct_option: b
+    explanation: "Correct. PostgreSQL refuses to drop a role that still holds privileges, and the user stays."
+
+  - id: ats114-030-03-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Restrict roles"
+    source_readings:
+      - sections/section-030/module-03/course-04-connections-limits-and-reset.md
+    prompt: "What does `allowed_roles` on a connection do?"
+    options:
+      - id: a
+        text: "Limits which roles may use the connection; avoid `*` in production."
+        explanation: "Correct. It is an allow list."
+      - id: b
+        text: "Sets the pool size."
+        explanation: "Not correct. That is `max_open_connections`."
+      - id: c
+        text: "Sets password length."
+        explanation: "Not correct. That is the password policy."
+      - id: d
+        text: "Lists leases."
+        explanation: "Not correct. It lists roles."
+    correct_option: a
+    explanation: "Correct. It is an allow list."
+
+  - id: ats114-030-03-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Reset a connection"
+    source_readings:
+      - sections/section-030/module-03/course-04-connections-limits-and-reset.md
+    prompt: "When would you reset a connection?"
+    options:
+      - id: a
+        text: "To revoke all leases."
+        explanation: "Not correct. Reset does not revoke."
+      - id: b
+        text: "To change the password policy."
+        explanation: "Not correct. Not related."
+      - id: c
+        text: "To delete roles."
+        explanation: "Not correct. Roles stay."
+      - id: d
+        text: "After the database restarted, so OpenBao opens new connections."
+        explanation: "Correct. Reset closes and reopens the pool."
+    correct_option: d
+    explanation: "Correct. Reset closes and reopens the pool."

@@ -4,7 +4,7 @@ The inventory team runs several services inside the cluster, such as `api.invent
 
 The PKI secrets engine makes OpenBao a certificate authority. A certificate authority (CA) is a key and a certificate that signs other certificates; anyone who trusts the CA trusts what it signs. **OpenBao keeps the CA keys inside its storage and signs certificates on request, through a role that limits what each request may get.**
 
-This module has three parts. **The PKI Engine And A Root CA** enables the engine and creates the root CA. **An Intermediate CA Signed By The Root** creates a second CA, has the root sign it, and explains why the root should sign nothing else. **Roles, Issuing Certificates And Revocation** limits names and lifetimes with a role, issues and checks certificates, sets the URLs certificates carry, and revokes one. A graded lab follows the third part.
+This module has four parts. **The PKI Engine And A Root CA** enables the engine and creates the root CA. **An Intermediate CA Signed By The Root** creates a second CA, has the root sign it, and explains why the root should sign nothing else. **Roles, Issuing Certificates And Revocation** limits names and lifetimes with a role, issues and checks certificates, sets the URLs certificates carry, and revokes one. A graded lab follows the third part. **Signing Requests And Inspecting Certificates** signs a request so the private key stays with the service, and reads what a certificate and OpenBao's stored copy contain.
 
 ## Learning objectives
 
@@ -17,6 +17,8 @@ After this module you can:
 - Write a role that limits names and lifetimes, and issue a certificate from it.
 - Check a certificate and its chain with `openssl`.
 - Set the issuing certificate and CRL URLs, revoke a certificate and read the CRL.
+- Sign a certificate signing request, and choose between `issue` and `sign`.
+- Read the names, purposes and serial number of a certificate, and list the certificates OpenBao keeps.
 
 ## Before you start
 

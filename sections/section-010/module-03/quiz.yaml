@@ -1,0 +1,245 @@
+# Knowledge check for section 010 module 03. Listed in astrona.yaml as a `type: quiz` entry after the module summary.
+schema_version: 1
+kind: question_bank
+id: ats114-010-03
+course_id: ATS114
+exam_code: OPENBAO
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: module
+  id: section-010-module-03
+  title: "Cubbyhole And Response Wrapping"
+placement:
+  position: after
+  reading: sections/section-010/module-03/course-05-summary.md
+questions:
+  - id: ats114-010-03-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Know the cubbyhole"
+    source_readings:
+      - sections/section-010/module-03/course-01-the-cubbyhole-engine.md
+    prompt: "Who can read the data in a token's cubbyhole?"
+    options:
+      - id: a
+        text: "Only that token; no policy can open the cubbyhole of another token."
+        explanation: "Correct. Each token has a private store."
+      - id: b
+        text: "Any token with the `read` capability on `cubbyhole/`."
+        explanation: "Not correct. Policies cannot open another token's cubbyhole."
+      - id: c
+        text: "Everyone with the root token, through a policy."
+        explanation: "Not correct. The cubbyhole is not shared, even with policies."
+      - id: d
+        text: "Every token of the same policy."
+        explanation: "Not correct. The store is per token, not per policy."
+    correct_option: a
+    explanation: "Correct. Each token has a private store."
+
+  - id: ats114-010-03-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Know cubbyhole lifetime"
+    source_readings:
+      - sections/section-010/module-03/course-01-the-cubbyhole-engine.md
+    prompt: "What happens to the cubbyhole when its token expires?"
+    options:
+      - id: a
+        text: "The data moves to the parent token."
+        explanation: "Not correct. Nothing moves."
+      - id: b
+        text: "The data stays for 30 days."
+        explanation: "Not correct. There is no grace period."
+      - id: c
+        text: "The data becomes readable by all tokens."
+        explanation: "Not correct. It is deleted, not shared."
+      - id: d
+        text: "OpenBao deletes the data."
+        explanation: "Correct. The store lives as long as the token."
+    correct_option: d
+    explanation: "Correct. The store lives as long as the token."
+
+  - id: ats114-010-03-q03
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Start wrapping"
+    source_readings:
+      - sections/section-010/module-03/course-02-response-wrapping.md
+    prompt: "How do you ask OpenBao to wrap a response?"
+    options:
+      - id: a
+        text: "Add a policy named `wrap` to the token."
+        explanation: "Not correct. Wrapping is requested per call."
+      - id: b
+        text: "Encrypt the secret with Transit first."
+        explanation: "Not correct. Transit is not needed for wrapping."
+      - id: c
+        text: "Send the request with a wrap TTL, for example `-wrap-ttl=10m`."
+        explanation: "Correct. A wrap TTL turns the response into a wrapping token."
+      - id: d
+        text: "Write the secret to `cubbyhole/` by hand and share the path."
+        explanation: "Not correct. Wrapping does this safely and single-use."
+    correct_option: c
+    explanation: "Correct. A wrap TTL turns the response into a wrapping token."
+
+  - id: ats114-010-03-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Use a wrapping token"
+    source_readings:
+      - sections/section-010/module-03/course-02-response-wrapping.md
+    prompt: "What does `bao unwrap` do with the wrapping token?"
+    options:
+      - id: a
+        text: "It returns the response and keeps the token for later."
+        explanation: "Not correct. The token is single-use."
+      - id: b
+        text: "It returns the original response and uses up the token."
+        explanation: "Correct. A wrapping token works once."
+      - id: c
+        text: "It renews the wrapping token."
+        explanation: "Not correct. Unwrapping does not renew."
+      - id: d
+        text: "It revokes the secret itself."
+        explanation: "Not correct. The secret is returned, not revoked."
+    correct_option: b
+    explanation: "Correct. A wrapping token works once."
+
+  - id: ats114-010-03-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "React to a failed unwrap"
+    source_readings:
+      - sections/section-010/module-03/course-02-response-wrapping.md
+    prompt: "A recipient's unwrap fails with an error that the token is invalid. What is the safe conclusion?"
+    options:
+      - id: a
+        text: "The token expired or someone used it first; treat the secret as exposed and send a new one."
+        explanation: "Correct. A failed unwrap may mean that another party unwrapped it."
+      - id: b
+        text: "The network is slow; try again later."
+        explanation: "Not correct. A used token never works again."
+      - id: c
+        text: "The secret was never created."
+        explanation: "Not correct. It was created and wrapped."
+      - id: d
+        text: "The recipient lacks a policy."
+        explanation: "Not correct. Unwrapping needs no policy."
+    correct_option: a
+    explanation: "Correct. A failed unwrap may mean that another party unwrapped it."
+
+  - id: ats114-010-03-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Look up a wrapping token"
+    source_readings:
+      - sections/section-010/module-03/course-03-verifying-a-wrapping-token.md
+    prompt: "What does `sys/wrapping/lookup` do?"
+    options:
+      - id: a
+        text: "It unwraps the token and shows the secret."
+        explanation: "Not correct. It does not return the secret."
+      - id: b
+        text: "It revokes the wrapping token."
+        explanation: "Not correct. It only looks."
+      - id: c
+        text: "It lists all wrapping tokens of the server."
+        explanation: "Not correct. It looks up one token."
+      - id: d
+        text: "It shows the creation path and TTL of a wrapping token, needs no token and does not use it up."
+        explanation: "Correct. The receiver can check where the token came from before unwrapping."
+    correct_option: d
+    explanation: "Correct. The receiver can check where the token came from before unwrapping."
+
+  - id: ats114-010-03-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Verify the origin"
+    source_readings:
+      - sections/section-010/module-03/course-03-verifying-a-wrapping-token.md
+    prompt: "What should a receiver compare before unwrapping?"
+    options:
+      - id: a
+        text: "The length of the token."
+        explanation: "Not correct. Length proves nothing about origin."
+      - id: b
+        text: "The name of the wrapping user."
+        explanation: "Not correct. The lookup shows the creation path."
+      - id: c
+        text: "The creation path of the token with the path they expect."
+        explanation: "Correct. The path shows which request produced the wrapping."
+      - id: d
+        text: "The current time on the server."
+        explanation: "Not correct. The time does not identify the origin."
+    correct_option: c
+    explanation: "Correct. The path shows which request produced the wrapping."
+
+  - id: ats114-010-03-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Wrap a dynamic credential"
+    source_readings:
+      - sections/section-010/module-03/course-04-wrapping-credentials-from-other-engines.md
+    prompt: "A database credential is read with a wrap TTL. What is true of the credential?"
+    options:
+      - id: a
+        text: "It is created only when the token is unwrapped."
+        explanation: "Not correct. It was created at the request."
+      - id: b
+        text: "It is already valid and its lease is running, even before it is unwrapped."
+        explanation: "Correct. The engine created the credential when the request was made."
+      - id: c
+        text: "It has no lease."
+        explanation: "Not correct. The lease exists from creation."
+      - id: d
+        text: "It can be unwrapped many times."
+        explanation: "Not correct. The wrapping token is single-use."
+    correct_option: b
+    explanation: "Correct. The engine created the credential when the request was made."
+
+  - id: ats114-010-03-q09
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Force wrapping with a policy"
+    source_readings:
+      - sections/section-010/module-03/course-04-wrapping-credentials-from-other-engines.md
+    prompt: "Which policy fields force a wrap TTL on a path?"
+    options:
+      - id: a
+        text: "`min_wrapping_ttl` and `max_wrapping_ttl`."
+        explanation: "Correct. They set the bounds of the wrap TTL a request must use."
+      - id: b
+        text: "`required_wrap` and `wrap_limit`."
+        explanation: "Not correct. These fields do not exist."
+      - id: c
+        text: "`wrap_ttl_default` only."
+        explanation: "Not correct. Policies use min and max wrapping TTLs."
+      - id: d
+        text: "`allowed_wrapping`."
+        explanation: "Not correct. This field does not exist."
+    correct_option: a
+    explanation: "Correct. They set the bounds of the wrap TTL a request must use."
+
+  - id: ats114-010-03-q10
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Know what travels"
+    source_readings:
+      - sections/section-010/module-03/course-04-wrapping-credentials-from-other-engines.md
+    prompt: "In a hand-over with response wrapping, what travels between people?"
+    options:
+      - id: a
+        text: "The secret in plain text and the token."
+        explanation: "Not correct. Plain text is what wrapping avoids."
+      - id: b
+        text: "The full response, encrypted."
+        explanation: "Not correct. OpenBao keeps the response."
+      - id: c
+        text: "Only a policy name."
+        explanation: "Not correct. A policy name cannot give access to a secret."
+      - id: d
+        text: "Only the wrapping token."
+        explanation: "Correct. The secret stays inside OpenBao until unwrapped."
+    correct_option: d
+    explanation: "Correct. The secret stays inside OpenBao until unwrapped."

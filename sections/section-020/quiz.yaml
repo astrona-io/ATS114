@@ -243,3 +243,49 @@ questions:
         explanation: "Not correct. Issued private keys are not stored in any mount."
     correct_option: b
     explanation: "Correct. If the service loses it, issue a new certificate."
+
+  - id: ats114-020-q11
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Choose sign or issue"
+    source_readings:
+      - sections/section-020/module-01/course-04-signing-requests-and-inspecting-certificates.md
+    prompt: "A server makes its own private key and must not send it to OpenBao. Which endpoint fits?"
+    options:
+      - id: a
+        text: "`pki_int/issue/<role>`"
+        explanation: "Not correct. OpenBao creates the key there and returns it once."
+      - id: b
+        text: "`pki_int/revoke`"
+        explanation: "Not correct. This revokes a certificate."
+      - id: c
+        text: "`pki_int/sign/<role>` with a certificate signing request."
+        explanation: "Correct. The requester keeps the key."
+      - id: d
+        text: "`pki_int/tidy`"
+        explanation: "Not correct. This removes expired entries."
+    correct_option: c
+    explanation: "Correct. The requester keeps the key."
+
+  - id: ats114-020-q12
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Know the role still applies"
+    source_readings:
+      - sections/section-020/module-01/course-04-signing-requests-and-inspecting-certificates.md
+    prompt: "A valid request names a `common_name` that the role does not allow. What happens when it is signed?"
+    options:
+      - id: a
+        text: "OpenBao signs it, because the request is valid."
+        explanation: "Not correct. The role is always checked."
+      - id: b
+        text: "OpenBao refuses it, because the role limits apply to signing as well as issuing."
+        explanation: "Correct. The request is checked against the role."
+      - id: c
+        text: "OpenBao signs it with a shorter TTL."
+        explanation: "Not correct. The name is refused, not shortened."
+      - id: d
+        text: "OpenBao signs it only for the root token."
+        explanation: "Not correct. The role applies to every token."
+    correct_option: b
+    explanation: "Correct. The request is checked against the role."

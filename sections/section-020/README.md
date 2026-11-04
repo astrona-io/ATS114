@@ -17,18 +17,35 @@ This section builds the usual two-tier hierarchy: a root CA that signs one inter
 
 ## The learning path
 
-The module starts at its landing page, which also launches the playground. The playground holds OpenBao, initialized and unsealed, with no PKI mounts yet.
+The modules start at their landing pages, which also launch their playgrounds. Each playground holds OpenBao, initialized and unsealed, with the engine of that module not set up yet.
 
 ### 1. Run An Internal Certificate Authority With The PKI Engine
 
 1. The PKI Engine And A Root CA
 2. An Intermediate CA Signed By The Root
 3. Roles, Issuing Certificates And Revocation, followed by the lab **Build A Two-Tier CA For The Inventory Services**
-4. Summary
+4. Signing Requests And Inspecting Certificates
+5. Summary
+
+### 2. Issuers And Root Rotation In The PKI Engine
+
+1. Issuers And Keys
+2. The Default Issuer And Roles
+3. Rotating A Root CA, followed by the lab **Rotate The Root Issuer Of A PKI Mount**
+4. Retiring An Issuer
+5. Summary
+
+### 3. Certificate Revocation, OCSP And Tidy In The PKI Engine
+
+1. Revoking Certificates And Reading The CRL
+2. Configuring The CRL
+3. OCSP And The URLs In A Certificate
+4. Tidy And Auto-Tidy, followed by the lab **Configure CRL, OCSP And Tidy For A PKI Mount**
+5. Summary
 
 ## Section capstone: Repair A Broken Certificate Chain
 
-The capstone is one graded scenario that combines the whole module. Someone started the inventory CA hierarchy and stopped half-way: the intermediate CA was never signed, its role allows the wrong domain, a role sits on the root mount, and certificates carry no URLs. Work it after the module lab.
+The capstone is one graded scenario that combines the whole section. Someone started the inventory CA hierarchy and stopped half-way: the intermediate CA was never signed, its role allows the wrong domain, a role sits on the root mount, and certificates carry no URLs. Work it after the module labs.
 
 Start the capstone:
 

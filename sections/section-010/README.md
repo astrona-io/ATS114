@@ -17,18 +17,35 @@ This section teaches the KV version 2 engine from the first write to the clean-u
 
 ## The learning path
 
-The module starts at its landing page, which also launches the playground. The playground holds OpenBao, initialized and unsealed, with nothing enabled yet.
+The modules start at their landing pages, which also launch their playgrounds. Each playground holds OpenBao, initialized and unsealed, with the engine of that module not set up yet.
 
 ### 1. Store And Version Secrets With KV Version 2
 
 1. Secrets Engines And The KV Version 2 Engine
 2. Versions, Deletes And Rollback
 3. Metadata, Version Limits And Check-And-Set, followed by the lab **Recover A Secret After A Bad Write**
-4. Summary
+4. Patching, Listing, Custom Metadata And The API Paths
+5. Summary
+
+### 2. Manage Secrets Engine Mounts
+
+1. Mounts, Paths And Engine Types
+2. Tuning A Mount
+3. Moving And Disabling Mounts, followed by the lab **Move And Tune Secrets Engine Mounts**
+4. KV Version 1 And Upgrading To Version 2
+5. Summary
+
+### 3. Cubbyhole And Response Wrapping
+
+1. The Cubbyhole Engine
+2. Response Wrapping
+3. Verifying A Wrapping Token, followed by the lab **Hand Over A Secret With Response Wrapping**
+4. Wrapping Credentials From Other Engines
+5. Summary
 
 ## Section capstone: Clean Up A KV Mount Before An Audit
 
-The capstone is one graded scenario that combines the whole module. An auditor arrives tomorrow. One secret leaked a debug dump into its current version, another secret can be overwritten without warning, and the mount keeps every version for ever. Work it after the module lab.
+The capstone is one graded scenario that combines the whole section. An auditor arrives tomorrow. One secret leaked a debug dump into its current version, another secret can be overwritten without warning, and the mount keeps every version for ever. Work it after the module labs.
 
 Start the capstone:
 

@@ -1,0 +1,245 @@
+# Knowledge check for section 040 module 02. Listed in astrona.yaml as a `type: quiz` entry after the module summary.
+schema_version: 1
+kind: question_bank
+id: ats114-040-02
+course_id: ATS114
+exam_code: OPENBAO
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: module
+  id: section-040-module-02
+  title: "Signing, Verifying And Hashing With Transit"
+placement:
+  position: after
+  reading: sections/section-040/module-02/course-05-summary.md
+questions:
+  - id: ats114-040-02-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Choose a signing key type"
+    source_readings:
+      - sections/section-040/module-02/course-01-signing-keys-and-signatures.md
+    prompt: "Which key type can sign?"
+    options:
+      - id: a
+        text: "`ed25519`, `ecdsa-p256` or an RSA type."
+        explanation: "Correct. Signing needs an asymmetric key."
+      - id: b
+        text: "`aes256-gcm96`, the default."
+        explanation: "Not correct. The default key type cannot sign."
+      - id: c
+        text: "Any type; the sign call picks one."
+        explanation: "Not correct. The type is fixed at creation."
+      - id: d
+        text: "Only `chacha20-poly1305`."
+        explanation: "Not correct. This type cannot sign."
+    correct_option: a
+    explanation: "Correct. Signing needs an asymmetric key."
+
+  - id: ats114-040-02-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Format the input"
+    source_readings:
+      - sections/section-040/module-02/course-01-signing-keys-and-signatures.md
+    prompt: "How must the input of a sign request be encoded?"
+    options:
+      - id: a
+        text: "As hex."
+        explanation: "Not correct. Base64 is required."
+      - id: b
+        text: "As plain text."
+        explanation: "Not correct. Base64 is required."
+      - id: c
+        text: "As a file path."
+        explanation: "Not correct. Send data, not a path."
+      - id: d
+        text: "As Base64."
+        explanation: "Correct. Transit takes Base64 input."
+    correct_option: d
+    explanation: "Correct. Transit takes Base64 input."
+
+  - id: ats114-040-02-q03
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Read a signature"
+    source_readings:
+      - sections/section-040/module-02/course-01-signing-keys-and-signatures.md
+    prompt: "What does `vault:v2:` at the start of a signature mean?"
+    options:
+      - id: a
+        text: "Version 2 of the Transit engine."
+        explanation: "Not correct. It names the key version."
+      - id: b
+        text: "Two signers signed."
+        explanation: "Not correct. It is a key version."
+      - id: c
+        text: "The signature was made with key version 2."
+        explanation: "Correct. The prefix names the version."
+      - id: d
+        text: "The signature expires in 2 days."
+        explanation: "Not correct. It is not a time."
+    correct_option: c
+    explanation: "Correct. The prefix names the version."
+
+  - id: ats114-040-02-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Read the result"
+    source_readings:
+      - sections/section-040/module-02/course-02-verifying-versions-and-signature-options.md
+    prompt: "A verify request is sent with a wrong signature. What does the HTTP status show?"
+    options:
+      - id: a
+        text: "An error status."
+        explanation: "Not correct. The request succeeds."
+      - id: b
+        text: "Success; the response field `valid` is `false`."
+        explanation: "Correct. The caller must read the field."
+      - id: c
+        text: "Nothing is returned."
+        explanation: "Not correct. `valid` is returned."
+      - id: d
+        text: "`valid` is true but a warning is added."
+        explanation: "Not correct. `valid` is false."
+    correct_option: b
+    explanation: "Correct. The caller must read the field."
+
+  - id: ats114-040-02-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Rotate the key"
+    source_readings:
+      - sections/section-040/module-02/course-02-verifying-versions-and-signature-options.md
+    prompt: "After a rotation, can old signatures still be verified?"
+    options:
+      - id: a
+        text: "Yes, and new signatures use the latest version."
+        explanation: "Correct. Old versions stay available for verification."
+      - id: b
+        text: "No, rotation invalidates all signatures."
+        explanation: "Not correct. Old versions still verify."
+      - id: c
+        text: "Only if the key is exported."
+        explanation: "Not correct. Export is not needed."
+      - id: d
+        text: "Only for 24 hours."
+        explanation: "Not correct. There is no such rule."
+    correct_option: a
+    explanation: "Correct. Old versions stay available for verification."
+
+  - id: ats114-040-02-q06
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Match the options"
+    source_readings:
+      - sections/section-040/module-02/course-02-verifying-versions-and-signature-options.md
+    prompt: "Why must `hash_algorithm` match between signer and verifier?"
+    options:
+      - id: a
+        text: "They never need to match."
+        explanation: "Not correct. They must match."
+      - id: b
+        text: "Only the signer needs it."
+        explanation: "Not correct. Both sides need it."
+      - id: c
+        text: "It is only for logging."
+        explanation: "Not correct. It changes the result."
+      - id: d
+        text: "A different hash gives a different digest, so verification fails."
+        explanation: "Correct. Options are part of the signature."
+    correct_option: d
+    explanation: "Correct. Options are part of the signature."
+
+  - id: ats114-040-02-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know the HMAC trust"
+    source_readings:
+      - sections/section-040/module-02/course-03-hmac-hashing-and-random-bytes.md
+    prompt: "What is shared in an HMAC check through Transit?"
+    options:
+      - id: a
+        text: "The key is sent to each client."
+        explanation: "Not correct. Keys stay inside."
+      - id: b
+        text: "A public key."
+        explanation: "Not correct. HMAC uses a secret key."
+      - id: c
+        text: "Trust in OpenBao; both sides ask OpenBao to compute it."
+        explanation: "Correct. The key never leaves Transit."
+      - id: d
+        text: "Nothing; HMAC needs no key."
+        explanation: "Not correct. It uses a Transit key."
+    correct_option: c
+    explanation: "Correct. The key never leaves Transit."
+
+  - id: ats114-040-02-q08
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Use hash and random"
+    source_readings:
+      - sections/section-040/module-02/course-03-hmac-hashing-and-random-bytes.md
+    prompt: "Do `hash` and `random` need a Transit key?"
+    options:
+      - id: a
+        text: "Yes, an RSA key."
+        explanation: "Not correct. No key is needed."
+      - id: b
+        text: "No; the hash and random endpoints need no key."
+        explanation: "Correct. They are plain utilities."
+      - id: c
+        text: "Yes, an AES key."
+        explanation: "Not correct. No key is needed."
+      - id: d
+        text: "Only with `exported`."
+        explanation: "Not correct. No key is needed."
+    correct_option: b
+    explanation: "Correct. They are plain utilities."
+
+  - id: ats114-040-02-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Separate operations"
+    source_readings:
+      - sections/section-040/module-02/course-04-access-control-export-and-backup.md
+    prompt: "How does a policy separate signing from verifying?"
+    options:
+      - id: a
+        text: "Each operation is its own path (`transit/sign/<key>` and `transit/verify/<key>`) with the `update` capability."
+        explanation: "Correct. Grant each path alone."
+      - id: b
+        text: "By one path with two capabilities."
+        explanation: "Not correct. They are separate paths."
+      - id: c
+        text: "By token TTL."
+        explanation: "Not correct. TTL does not separate them."
+      - id: d
+        text: "It cannot be separated."
+        explanation: "Not correct. It can."
+    correct_option: a
+    explanation: "Correct. Grant each path alone."
+
+  - id: ats114-040-02-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Protect keys"
+    source_readings:
+      - sections/section-040/module-02/course-04-access-control-export-and-backup.md
+    prompt: "What is the safe default for exporting signing keys?"
+    options:
+      - id: a
+        text: "Mark all keys exportable."
+        explanation: "Not correct. Do not export without reason."
+      - id: b
+        text: "Export weekly."
+        explanation: "Not correct. Not needed."
+      - id: c
+        text: "Backups are harmless."
+        explanation: "Not correct. Backups hold key material."
+      - id: d
+        text: "Keep them non-exportable, and treat backups as secrets."
+        explanation: "Correct. Export makes the key leave OpenBao."
+    correct_option: d
+    explanation: "Correct. Export makes the key leave OpenBao."
